@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'PRC',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh-CN',
 
     /*
     |--------------------------------------------------------------------------
@@ -160,6 +160,17 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //debugbar
+        Barryvdh\Debugbar\ServiceProvider::class,
+
+        //验证码
+        Mews\Captcha\CaptchaServiceProvider::class,
+
+        //菜单高亮
+        HieuLe\Active\ActiveServiceProvider::class,
+
+        //菜单面包屑
+//        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
     ],
 
     /*
@@ -208,6 +219,18 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //debugbar
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
+        //验证码
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+
+        //菜单高亮
+        'Active' => HieuLe\Active\Facades\Active::class,
+
+        //菜单面包屑
+//        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
 
     ],
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\VerificationCode;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin/home';
 
     /**
      * Create a new controller instance.
@@ -48,10 +49,35 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        /*return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+        ]);*/
+
+        $result = false;
+        $info = VerificationCode::where(['phone'=>$data['phone']])->orderBy("id","desc")->first();
+        //当前时间戳
+        $now_time = time();
+        if($info){
+            if(($info->create_time_stamp+config("program.ACTIVE_TIME"))>$now_time){
+                $result = true;
+            }
+            //删除该验证码数据
+            VerificationCode::where(['phone'=>$data['phone']])->delete();
+        }
+
+        $data = array_merge($data,['result'=>$result]);
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|digits_between:11,11|unique:users',
+            'yzm' => 'required',
+            'result' => 'accepted',
+            'password' => 'required|string|min:6|confirmed',
+        ],[
+            'result.accepted' => '验证码输入有误'
         ]);
     }
 
@@ -66,6 +92,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
     }
