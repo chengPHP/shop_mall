@@ -34,19 +34,25 @@
             </div>
         </div>
         <div class="hr-line-dashed"></div>
+
         <div class="form-group">
             <label for="Comment" class="col-sm-2 control-label">品牌logo</label>
             <div class="col-sm-10">
-
-                <div id="uploader-demo">
-                    <!--用来存放item-->
-                    <div id="fileList" class="uploader-list"></div>
-                    <div id="filePicker">选择图片</div>
+                @if($info->get_brand_logo)
+                    <img id="thumb_img" src="{{asset($info->get_brand_logo['path'])}}" class="img-md">
+                @else
+                    <img id="thumb_img" src="{{asset('img/nopicture.jpg')}}" alt="" class="img-md">
+                @endif
+                <input type="hidden" id="upload_id" name="file_id" value="{{$info->brand_logo}}">
+                <div id="single-upload" class="btn-upload m-t-xs">
+                    <div id="filePicker" class="pickers"><i class="fa fa-upload"></i> 选择图片</div>
+                    <div id="single-upload-file-list"></div>
                 </div>
                 <span class="help-block dw-fontsize-8">* 如果不上传图片，则不修改logo</span>
-
             </div>
         </div>
+
+
         <div class="hr-line-dashed"></div>
         <div class="form-group">
             <label class="col-sm-2 control-label">状态</label>
@@ -120,46 +126,20 @@
                 ),
                 $img = $li.find('img');
 
-
             var $list = $("#fileList");
 
             // $list为容器jQuery实例
             $list.append( $li );
 
-            // 创建缩略图
-            // 如果为非图片文件，可以不用调用此方法。
-            // thumbnailWidth x thumbnailHeight 为 100 x 100
-//            uploader.makeThumb( file, function( error, src ) {
-//                if ( error ) {
-//                    $img.replaceWith('<span>不能预览</span>');
-//                    return;
-//                }
-//
-//                $img.attr( 'src', src );
-//            }, thumbnailWidth, thumbnailHeight );
         });
 
-        // 文件上传过程中创建进度条实时显示。
-        uploader.on( 'uploadProgress', function( file, percentage ) {
-            var $li = $( '#'+file.id ),
-                $percent = $li.find('.progress span');
-
-            // 避免重复创建
-            if ( !$percent.length ) {
-                $percent = $('<p class="progress"><span></span></p>')
-                    .appendTo( $li )
-                    .find('span');
-            }
-
-            $percent.css( 'width', percentage * 100 + '%' );
-        });
 
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on( 'uploadSuccess', function( file, response ) {
             $( '#'+file.id ).addClass('upload-state-done');
             var id = response.ids.id;
-            $('#uploader-demo').append('<input type="hidden" name="file[]" value="'+response.ids.id+'">');
-//            $('.webuploader-element-invisible')
+            $("#upload_id").val(id);
+            $("#thumb_img").attr('src',response.ids.url);
         });
 
         // 文件上传失败，显示上传出错。
@@ -179,7 +159,6 @@
         uploader.on( 'uploadComplete', function( file ) {
             $( '#'+file.id ).find('.progress').remove();
         });
-
     });
 
 

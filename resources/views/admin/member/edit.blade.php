@@ -135,6 +135,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4" >
+                <div class="form-group">
+                    <label for="Comment" class="col-sm-4 control-label">照片</label>
+                    <div class="col-sm-8">
+                        @if($info->get_member_head)
+                            <img id="thumb_img" src="{{asset($info->get_member_head['path'])}}" alt="" class="img-md">
+                        @else
+                            <img id="thumb_img" src="{{asset('img/nopicture.jpg')}}" alt="" class="img-md">
+                        @endif
+                        <input type="hidden" id="upload_id" name="file_id" value="{{$info->member_head}}">
+                        <div id="single-upload" class="btn-upload m-t-xs">
+                            <div id="filePicker" class="pickers"><i class="fa fa-upload"></i> 选择图片</div>
+                            <div id="single-upload-file-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="modal-footer">
@@ -160,6 +179,81 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
+
+
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: '{{ asset("admin/js/plugins/webuploader/Uploader.swf") }}',
+
+            // 文件接收服务端。
+            server: "{{ route('image.upload') }}",
+
+            formData: {
+                '_token':'{{ csrf_token() }}'
+            },
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        // 当有文件添加进来的时候
+        uploader.on( 'fileQueued', function( file ) {
+            var $li = $(
+                    '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                    '</div>'
+                ),
+                $img = $li.find('img');
+
+            var $list = $("#fileList");
+
+            // $list为容器jQuery实例
+            $list.append( $li );
+
+        });
+
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+        uploader.on( 'uploadSuccess', function( file, response ) {
+            $( '#'+file.id ).addClass('upload-state-done');
+            var id = response.ids.id;
+            $("#upload_id").val(id);
+            $("#thumb_img").attr('src',response.ids.url);
+        });
+
+        // 文件上传失败，显示上传出错。
+        uploader.on( 'uploadError', function( file ) {
+            var $li = $( '#'+file.id ),
+                $error = $li.find('div.error');
+
+            // 避免重复创建
+            if ( !$error.length ) {
+                $error = $('<div class="error"></div>').appendTo( $li );
+            }
+
+            $error.text('上传失败');
+        });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+        uploader.on( 'uploadComplete', function( file ) {
+            $( '#'+file.id ).find('.progress').remove();
+        });
+
+
     });
     function tijiao(obj) {
         $.ajax({

@@ -54,16 +54,12 @@
                                         </td>
                                         <td>{{$v['name']}}</td>
                                         <td>
-                                            @foreach($v['files'] as $value)
-                                                <a href="{{url($value['path'])}}" data-lightbox="roadtrip">
-                                                    <img src="{{asset($value['path'])}}" style="max-width: 30px;max-height: 30px;">
-                                                </a>
-
-                                            @endforeach
+                                            <a href="{{url($v->get_brand_logo['path'])}}" data-lightbox="roadtrip">
+                                                <img src="{{asset($v->get_brand_logo['path'])}}" style="max-width: 30px;max-height: 30px;">
+                                            </a>
                                         </td>
                                         <td>
                                             <a href="{{$v['site_url']}}" title="{{$v['name']}}" target="_blank">{{$v['site_url']}}</a>
-
                                         </td>
                                         <td>{{$v['brand_desc']}}</td>
                                         <td>

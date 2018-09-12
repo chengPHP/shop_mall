@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
     //会员头像
-    public function member_head(){
+    public function get_member_head(){
         return $this->belongsTo('App\Models\File','member_head');
     }
 

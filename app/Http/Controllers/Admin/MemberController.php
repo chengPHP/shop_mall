@@ -26,7 +26,7 @@ class MemberController extends Controller
         }else{
             $search = null;
         }
-        $list = Member::with('member_head','rank')->where($map)->paginate(5);
+        $list = Member::with('get_member_head','rank')->where($map)->paginate(5);
         return view("admin.member.index",compact('list','search'));
     }
 
@@ -67,6 +67,10 @@ class MemberController extends Controller
         $member->reg_time = date('Y-m-d H:i:s');
         $member->status = $request->status;
 
+        if($request->file_id){
+            $member->member_head = $request->file_id;
+        }
+
         if($member->save()){
             $message = [
                 'code' => 1,
@@ -93,7 +97,7 @@ class MemberController extends Controller
         $map = [
             ['id','=',$id]
         ];
-        $info = Member::where($map)->with('member_head','rank','address')->first();
+        $info = Member::where($map)->with('get_member_head','rank','address')->first();
         return view('admin.member.show',compact('info'));
     }
 
@@ -121,9 +125,13 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $arr = $request->except('_method','_token','password','password_confirmation');
+        $arr = $request->except('_method','_token','password','password_confirmation','file_id');
         if($request->password){
             $arr['password'] = encrypt($request->password);
+        }
+
+        if($request->file_id){
+            $arr['member_head'] = $request->file_id;
         }
 
         $info = Member::where('id',$id)->update($arr);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    public function files(){
-        return $this->belongsToMany('App\Models\File');
+    public function get_brand_logo(){
+        return $this->belongsTo('App\Models\File','brand_logo');
     }
 }

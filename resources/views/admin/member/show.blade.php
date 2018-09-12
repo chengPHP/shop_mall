@@ -109,6 +109,17 @@
                 </div>
             </div>
 
+            <div class="col-md-4" >
+                <div class="form-group">
+                    <label for="home_phone" class="col-sm-4 control-label">头像</label>
+                    <div class="col-sm-8">
+                        <a href="{{url($info->get_member_head['path'])}}" data-lightbox="roadtrip">
+                            <img src="{{asset($info->get_member_head['path'])}}" style="max-width: 30px;max-height: 30px;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-6" >
                 <div class="form-group">
                     <label class="col-sm-2 control-label">状态</label>

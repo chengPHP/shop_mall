@@ -27,7 +27,7 @@ class BrandController extends Controller
         }else{
             $search = null;
         }
-        $list = Brand::with('files')->where($map)->paginate(5);
+        $list = Brand::with('get_brand_logo')->where($map)->paginate(5);
         return view("admin.brand.index",compact('list','search'));
     }
 
@@ -57,8 +57,11 @@ class BrandController extends Controller
         $brand->is_show = 1;
         $brand->status = $request->status;
 
+        if($request->file_id){
+            $brand->brand_logo = $request->file_id;
+        }
+
         if($brand->save()){
-            $brand->files()->sync($request->file);
             $message = [
                 'code' => 1,
                 'message' => '品牌添加成功'
@@ -91,7 +94,7 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        $info = Brand::with('files')->find($id);
+        $info = Brand::with('get_brand_logo')->find($id);
         return view('admin.brand.edit',compact('info'));
     }
 
@@ -113,28 +116,15 @@ class BrandController extends Controller
             'status' => $request->status,
         ];
 
-        $brand = Brand::find(1);
+        if($request->file_id){
+            $arr['brand_logo'] = $request->file_id;
+        }
 
         if(Brand::where('id',$id)->update($arr)){
-            if($request->file){
-                $info = $brand->files()->sync($request->file);
-                if($info){
-                    $message = [
-                        'code' => 1,
-                        'message' => '品牌信息修改成功'
-                    ];
-                }else{
-                    $message = [
-                        'code' => 0,
-                        'message' => '品牌信息修改失败，请稍后重试'
-                    ];
-                }
-            }else{
-                $message = [
-                    'code' => 1,
-                    'message' => '品牌信息修改成功'
-                ];
-            }
+            $message = [
+                'code' => 1,
+                'message' => '品牌信息修改成功'
+            ];
         }else{
             $message = [
                 'code' => 0,
