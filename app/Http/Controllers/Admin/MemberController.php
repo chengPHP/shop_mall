@@ -48,7 +48,6 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $member = new Member();
         $member->nickname = $request->nickname;
         $member->member_head = $request->member_head;
@@ -60,9 +59,13 @@ class MemberController extends Controller
         $member->password_answer = $request->password_answer;
         $member->sex = $request->sex;
         $member->birthday = $request->birthday;
+        $member->qq = $request->qq;
+        $member->office_phone = $request->office_phone;
+        $member->home_phone = $request->home_phone;
         $member->rank_id = 1;
         $member->rank_points = 0;
         $member->reg_time = date('Y-m-d H:i:s');
+        $member->status = $request->status;
 
         if($member->save()){
             $message = [
@@ -87,7 +90,11 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $map = [
+            ['id','=',$id]
+        ];
+        $info = Member::where($map)->with('member_head','rank','address')->first();
+        return view('admin.member.show',compact('info'));
     }
 
     /**
@@ -98,7 +105,11 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        $map = [
+            ['id','=',$id]
+        ];
+        $info = Member::where($map)->first();
+        return view('admin.member.edit',compact('info'));
     }
 
     /**
@@ -110,7 +121,24 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $arr = $request->except('_method','_token','password','password_confirmation');
+        if($request->password){
+            $arr['password'] = encrypt($request->password);
+        }
+
+        $info = Member::where('id',$id)->update($arr);
+        if($info){
+            $message = [
+                'code' => 1,
+                'message' => '会员信息修改成功'
+            ];
+        }else{
+            $message = [
+                'code' => 0,
+                'message' => '会员信息修改失败，请稍后重试'
+            ];
+        }
+        return response()->json($message);
     }
 
     /**
@@ -121,6 +149,24 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //把ids字符串拆分成数组
+        $idArr = explode(",",$id);
+        foreach ($idArr as $v) {
+            $info = Member::where("id", $v)->update(['status' => -1]);
+            if ($info) {
+                continue;
+            } else {
+                $message = [
+                    'code' => 0,
+                    'message' => '会员信息删除失败，请稍后重试'
+                ];
+                return response()->json($message);
+            }
+        }
+        $message = [
+            'code' => 1,
+            'message' => '会员信息删除成功'
+        ];
+        return response()->json($message);
     }
 }

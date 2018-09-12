@@ -14,4 +14,8 @@ class Member extends Model
     public function rank(){
         return $this->belongsTo('App\Models\Rank');
     }
+
+    public function address(){
+        return $this->belongsToMany('App\Models\Address');
+    }
 }

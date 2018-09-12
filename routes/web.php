@@ -39,6 +39,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     //会员管理
     Route::resource('member','MemberController');
 
+    //城市管理
+    Route::resource('region','RegionController');
+
 });
 
 //文件管理模块路由开始

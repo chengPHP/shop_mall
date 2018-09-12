@@ -1,31 +1,31 @@
 
 <div class="ibox-title">
-    <h5>修改类别信息</h5>
+    <h5>修改城市信息</h5>
 </div>
 <div class="ibox-content">
-    <form method="post" class="form-horizontal" action="{{url('admin/category')}}/{{$info->id}}">
+    <form method="post" class="form-horizontal" action="{{url('admin/region')}}/{{$info->id}}">
         <div class="modal-body">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <input type="hidden" name="_method" value="PUT">
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">类别名称</label>
+                <label for="name" class="col-sm-2 control-label">城市名称</label>
                 <div class="col-sm-10">
                     <input id="name" type="text" name="name" value="{{$info->name}}" class="form-control">
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">类别别名</label>
+                <label for="code" class="col-sm-2 control-label">城市编号</label>
                 <div class="col-sm-10">
-                    <input id="name" type="text" name="alias" value="{{$info->alias}}" class="form-control">
+                    <input id="code" type="text" name="code" value="{{$info->code}}" placeholder="城市编号" class="form-control">
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
             <div class="form-group">
-                <label for="pid" class="col-sm-2 control-label">父级类别</label>
+                <label for="pid" class="col-sm-2 control-label">父级名称</label>
                 <div class="col-sm-10">
                     <select id="pid" class="form-control m-b select2" name="pid">
-                        {!! category_select($info->pid, 1, $info->id) !!}
+                        {!! region_select($info->pid,1,$info->id) !!}
                     </select>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="deleteCategory('{{$info->id}}')">删除</button>
+            <button type="button" class="btn btn-danger" onclick="deleteRegion('{{$info->id}}')">删除</button>
             <button type="button" onclick="tijiao(this)" class="btn btn-primary">提交</button>
         </div>
     </form>
@@ -70,7 +70,7 @@
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/category')}}/{{$info->id}}",
+            url: "{{url('admin/region')}}/{{$info->id}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {
@@ -102,9 +102,9 @@
         });
     }
 
-    function deleteCategory(id) {
+    function deleteRegion(id) {
         swal({
-                title: '确定要删除此类别吗？',
+                title: '确定要删除此城市信息吗？',
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -114,7 +114,7 @@
             },
             function(){
                 $.ajax({
-                    url: "{{url('admin/category')}}"+'/'+id,
+                    url: "{{url('admin/region')}}"+'/'+id,
                     type: 'POST',
                     dataType: 'json',
                     data: {

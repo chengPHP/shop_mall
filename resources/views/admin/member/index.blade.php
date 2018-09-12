@@ -61,8 +61,9 @@
                                         <td>{{$v['rank']['name']}}</td>
                                         <td>{{$v['rank_points']}}</td>
                                         <td>
-                                            <span class="btn btn-xs btn-info" title="修改信息" onclick="updateMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-wrench"></i> 修改</span>
-                                            <span class="btn btn-xs btn-danger" title="删除会员" onclick="deleteMember('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
+                                            <span class="btn btn-xs btn-info" title="详情信息" onclick="showMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
+                                            <span class="btn btn-xs btn-info" title="修改信息" onclick="updateMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 修改</span>
+                                            <span class="btn btn-xs btn-danger" title="删除会员信息" onclick="deleteMember('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -112,7 +113,7 @@
         }
 
         function updateMember(id) {
-            $(".bs-example-modal-md .modal-content").html();
+            $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
                 url: "{{url('admin/member')}}/"+id+'/edit',
                 type: 'GET',
@@ -121,7 +122,22 @@
                 beforeSend: function () {
                 },
                 success: function (data, textStatus, xhr) {
-                    $(".bs-example-modal-md .modal-content").html(data);
+                    $(".bs-example-modal-lg .modal-content").html(data);
+                }
+            });
+        }
+
+        function showMember(id) {
+            $(".bs-example-modal-lg .modal-content").html();
+            $.ajax({
+                url: "{{url('admin/member')}}/"+id,
+                type: 'GET',
+                dataType: 'HTML',
+                cache:false,
+                beforeSend: function () {
+                },
+                success: function (data, textStatus, xhr) {
+                    $(".bs-example-modal-lg .modal-content").html(data);
                 }
             });
         }

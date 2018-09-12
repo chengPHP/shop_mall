@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('alias')->defalut()->comment("别名");
             $table->integer('pid')->defalut(0)->comment("父级id");
             $table->string('path')->defalut('0,')->comment("父级路径");
-            $table->string('describe')->defalut()->comment("描述内容");
+            $table->string('descr')->nullable()->comment("描述内容");
             $table->string('status')->defalut("1")->comment("类别状态 -1|软删除 0|已禁用 1|启用");
             $table->timestamps();
         });

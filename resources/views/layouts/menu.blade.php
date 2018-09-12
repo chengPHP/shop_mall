@@ -23,6 +23,10 @@
     <a href="{{url('admin/member')}}"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">会员管理</span></a>
 </li>
 
+<li class="{{ active_class(if_uri_pattern('admin/region*')) }}">
+    <a href="{{url('admin/region')}}"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">城市管理</span></a>
+</li>
+
 {{--<li class="{{ active_class(if_uri_pattern('admin/article*')) }}">
     <a href="{{url('admin/article')}}"><i class="fa fa-folder-open"></i> <span class="nav-label">文章管理</span> <span
                 class="fa arrow"></span></a>

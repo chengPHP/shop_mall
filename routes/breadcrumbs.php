@@ -37,6 +37,12 @@ Breadcrumbs::register('member', function ($breadcrumbs) {
     $breadcrumbs->push('会员管理', url('admin/member'));
 });
 
+// 后台首页/城市管理
+Breadcrumbs::register('region', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('城市管理', url('admin/region'));
+});
+
 
 // 后台首页/角色管理
 Breadcrumbs::register('role', function ($breadcrumbs) {

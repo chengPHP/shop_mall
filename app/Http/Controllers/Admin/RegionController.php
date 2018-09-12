@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\CategoryRequest;
-use App\Models\Category;
-use App\Models\Good;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CategoryController extends Controller
+class RegionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,15 +20,15 @@ class CategoryController extends Controller
         $map = [
             ['status','>=',0]
         ];
-        $list = Category::where($map)->get();
+        $list = Region::where($map)->get();
 
         $where[] = ['status', '!=', -1];
         $tempData = [
             [
                 'id' => 0,
                 'pid' => -1,
-                'text' => "商品类别集合",
-                'name' => "商品类别集合",
+                'text' => "城市管理集合",
+                'name' => "城市管理集合",
                 'href' => '',//编辑地址
                 'open' => true,
                 'icon' => asset('admin/js/plugins/zTree/css/zTreeStyle2/img/diy/global.gif')
@@ -38,8 +36,8 @@ class CategoryController extends Controller
         ];
         if ($list) {
             foreach ($list as $key => $val) {
-                if ($val['name']) {
-//                    $val['name'] .= '(' . $val['name'] . ')';
+                if ($val['code']) {
+                    $val['name'] .= '(' . $val['code'] . ')';
                 }
                 if ($val['status']==0) {
                     $val['name'] .= '(已禁用)';
@@ -52,7 +50,7 @@ class CategoryController extends Controller
         }
 
 
-        return view('admin.category.index',compact("tempData","list"));
+        return view('admin.region.index',compact("tempData","list"));
     }
 
     /**
@@ -62,7 +60,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("admin.category.add");
+        return view("admin.region.add");
     }
 
     /**
@@ -71,33 +69,30 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
-        $category = new Category();
-        $category->name = $request->name;
-        if($request->alias){
-            $category->alias = $request->alias;
-        }else{
-            $pinyin = app('pinyin');
-            $category->alias =  $pinyin->sentence($request->name);
+        $region = new Region();
+        $region->name = $request->name;
+        $region->pid = $request->pid;
+        if($request->code){
+            $region->code = $request->code;
         }
-        $category->pid = $request->pid;
-        $category->status = $request->status;
+        $region->status = $request->status;
         if($request->pid){
-            $category->path = Category::where('id',$request->pid)->find("path").$request->pid.',';
+            $region->path = Region::where('id',$request->pid)->find("path").$request->pid.',';
         }else{
-            $category->path = '0,';
+            $region->path = '0,';
         }
 
-        if($category->save()){
+        if($region->save()){
             $message = [
                 'code' => config('program.status.right'),
-                'message' => '商品类别添加成功'
+                'message' => '城市添加成功'
             ];
         }else{
             $message = [
                 'code' => config('program.status.errors'),
-                'message' => '商品类别添加失败，请稍后重试'
+                'message' => '城市添加失败，请稍后重试'
             ];
         }
         return response()->json($message);
@@ -122,8 +117,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $info = Category::find($id);
-        return view("admin.category.edit",compact("info"));
+        $info = Region::find($id);
+        return view("admin.region.edit",compact("info"));
     }
 
     /**
@@ -133,14 +128,12 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => Rule::unique('categories')->ignore($id),
-            'alias' => Rule::unique('categories')->ignore($id)
+            'name' => Rule::unique('regions')->ignore($id)
         ],[
-            'name.unique'=>'类别名称已存在',
-            'alias.unique'=>'类别别名已存在',
+            'name.unique'=>'城市名称已存在'
         ]);
 
         if ($validator->fails()) {
@@ -160,33 +153,27 @@ class CategoryController extends Controller
 
         $arr = [
             'name' => $request->name,
-            'pid' => $request->pid,
+            'code' => $request->code,
+            'pid' => $request->pid
         ];
 
-        if($request->alias){
-            $arr['alias'] = $request->alias;
-        }else{
-            $pinyin = app('pinyin');
-            $arr['alias'] =  $pinyin->sentence($request->name);
-        }
-
         if($request->pid){
-            $arr['path'] = Category::where("id",$request->pid)->value("path").$request->pid.',';
+            $arr['path'] = Region::where("id",$request->pid)->value("path").$request->pid.',';
         }else{
             $arr['path'] = '0,';
         }
 
-        $info = Category::where('id',$id)->update($arr);
+        $info = Region::where('id',$id)->update($arr);
 
         if($info){
             $message = [
                 'code' => config('program.status.right'),
-                'message' => '商品类别信息修改成功'
+                'message' => '城市信息修改成功'
             ];
         }else{
             $message = [
                 'code' => config('program.status.errors'),
-                'message' => '商品类别信息修改失败，请稍后重试'
+                'message' => '城市信息修改失败，请稍后重试'
             ];
         }
         return response()->json($message);
@@ -201,26 +188,19 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $message = [];
-        $info = Category::where('pid',$id)->first();
+        $info = Region::where('pid',$id)->first();
         if($info){
             $message = [
                 'code' => 0,
-                'message' => '此类别下面还有子类别，不能删除'
+                'message' => '此类别下面还有子城市，不能删除'
             ];
         }else{
-            if(Good::where('category_id',$id)->first()){
+            $info1 = Region::where('id',$id)->update(['status'=>-1]);
+            if($info1){
                 $message = [
-                    'code' => 0,
-                    'message' => '此类别下面还有商品，不能删除'
+                    'code' => 1,
+                    'message' => '城市信息删除成功'
                 ];
-            }else{
-                $info1 = Category::where('id',$id)->update(['status'=>-1]);
-                if($info1){
-                    $message = [
-                        'code' => 1,
-                        'message' => '商品类别删除成功'
-                    ];
-                }
             }
         }
 

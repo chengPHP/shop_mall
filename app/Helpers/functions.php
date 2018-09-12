@@ -196,7 +196,7 @@ if(!function_exists("no_permission")){
 
 
 if(!function_exists("category_select")){
-    function category_select($selected = 0, $type = 0){
+    function category_select($selected = 0, $type = 0, $id=null){
         $list = \App\Models\Category::where([['status','>=',0]])->get();
 
         if ($type == 1) {
@@ -208,7 +208,8 @@ if(!function_exists("category_select")){
             foreach ($list as $key => $val) {
                 if ($selected) {
                     $str .= '<option value="' . $val['id'] . '" '
-                        . ($selected==$val['id'] ? 'selected="selected"' : '') . '>'
+                        . ($selected==$val['id'] ? 'selected="selected"' : '')
+                        . ($id==$val['id'] ? 'disabled' : '') . '>'
                         .$val['name'] . '</option>';
                 } else {
                     $str .= '<option value="' . $val['id'] . '" ' . '>'
@@ -216,6 +217,49 @@ if(!function_exists("category_select")){
                 }
             }
         }
+        return $str;
+    }
+}
+
+if(!function_exists("region_select")){
+    function region_select($selected = 0, $type = 0, $id=null){
+        $list = \App\Models\Region::where([['status','>=',0]])->get();
+
+        if ($type == 1) {
+            $str = '<option value="0">顶级城市</option>';
+        } else {
+            $str = '<option value="0">请选择城市</option>';
+        }
+        if ($list) {
+            foreach ($list as $key => $val) {
+                if ($selected) {
+                    $str .= '<option value="' . $val['id'] . '" '
+                        . ($selected==$val['id'] ? 'selected="selected"' : '')
+                        . ($id==$val['id'] ? 'disabled' : '') . '>'
+                        .$val['name'] . '</option>';
+                } else {
+                    $str .= '<option value="' . $val['id'] . '" ' . '>'
+                        .  $val['name'] . '</option>';
+                }
+            }
+        }
+        return $str;
+    }
+}
+
+/*
+ * 城市级联
+ * */
+if(!function_exists("get_region_name")) {
+    function get_region_name($path, $key)
+    {
+        $arr = explode(',',$path);
+        $str = '';
+        foreach ($arr as $v) {
+            $str .= \App\Models\Region::where('id', $v)->value($key) . '/';
+        }
+
+        $str = trim($str, '/');
         return $str;
     }
 }

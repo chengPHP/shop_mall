@@ -1,21 +1,21 @@
 <div class="ibox-title">
-    <h5>添加类别</h5>
+    <h5>添加城市</h5>
 </div>
 <div class="ibox-content">
-    <form method="post" class="form-horizontal" action="{{url('admin/category')}}">
+    <form method="post" class="form-horizontal" action="{{url('admin/region')}}">
         <div class="modal-body">
             {{csrf_field()}}
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">类别名称</label>
+                <label for="name" class="col-sm-2 control-label">城市名称</label>
                 <div class="col-sm-10">
-                    <input id="name" type="text" name="name" value="" class="form-control">
+                    <input id="name" type="text" name="name" placeholder="城市名称" class="form-control">
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">类别别名</label>
+                <label for="code" class="col-sm-2 control-label">城市编号</label>
                 <div class="col-sm-10">
-                    <input id="name" type="text" name="alias" value="" class="form-control">
+                    <input id="code" type="text" name="code" placeholder="城市编号" class="form-control">
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
@@ -23,7 +23,7 @@
                 <label for="pid" class="col-sm-2 control-label">父级类别</label>
                 <div class="col-sm-10">
                     <select id="pid" class="form-control m-b select2" name="pid">
-                        {!! category_select() !!}
+                        {!! region_select() !!}
                     </select>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/category')}}",
+            url: "{{url('admin/region')}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {
@@ -96,4 +96,5 @@
     }
 
 </script>
+
 

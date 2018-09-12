@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label for="password" class="col-sm-4 control-label">密码<span style="color:red;">*</span></label>
                     <div class="col-sm-8">
-                        <input id="password" type="password" class="form-control" name="password" required>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="密码为空，则不修改密码" required>
                     </div>
                 </div>
             </div>
@@ -108,21 +108,12 @@
             </div>
             <div class="col-md-4" >
                 <div class="form-group">
-                    <label for="msn" class="col-sm-4 control-label">msn</label>
-                    <div class="col-sm-8">
-                        <input id="msn" type="text" name="msn" placeholder="msn账号" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" >
-                <div class="form-group">
                     <label for="qq" class="col-sm-4 control-label">qq账号</label>
                     <div class="col-sm-8">
                         <input id="qq" type="text" name="qq" placeholder="qq账号" class="form-control">
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="office_phone" class="col-sm-4 control-label">办公电话</label>
@@ -131,19 +122,12 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="home_phone" class="col-sm-4 control-label">家庭电话</label>
                     <div class="col-sm-8">
                         <input id="home_phone" type="text" name="home_phone" placeholder="家庭电话" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" >
-                <div class="form-group">
-                    <label for="mobile_phone" class="col-sm-4 control-label">移动电话</label>
-                    <div class="col-sm-8">
-                        <input id="mobile_phone" type="text" name="mobile_phone" placeholder="移动电话" class="form-control">
                     </div>
                 </div>
             </div>
