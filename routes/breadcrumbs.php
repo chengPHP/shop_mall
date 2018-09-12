@@ -7,6 +7,37 @@ Breadcrumbs::register('admin/home', function ($breadcrumbs) {
     $breadcrumbs->push('后台首页', url('admin/home'));
 });
 
+// 后台首页/用户管理
+Breadcrumbs::register('user', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('用户管理', url('admin/user'));
+});
+
+// 后台首页/类别管理
+Breadcrumbs::register('category', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('类别管理', url('admin/category'));
+});
+
+// 后台首页/品牌管理
+Breadcrumbs::register('brand', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('品牌管理', url('admin/brand'));
+});
+
+// 后台首页/会员等级管理
+Breadcrumbs::register('rank', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('会员等级管理', url('admin/rank'));
+});
+
+// 后台首页/会员管理
+Breadcrumbs::register('member', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('会员管理', url('admin/member'));
+});
+
+
 // 后台首页/角色管理
 Breadcrumbs::register('role', function ($breadcrumbs) {
     $breadcrumbs->parent('admin/home');
@@ -19,17 +50,7 @@ Breadcrumbs::register('permission', function ($breadcrumbs) {
     $breadcrumbs->push('权限管理', url('admin/permission'));
 });
 
-// 后台首页/用户管理
-Breadcrumbs::register('user', function ($breadcrumbs) {
-    $breadcrumbs->parent('admin/home');
-    $breadcrumbs->push('用户管理', url('admin/user'));
-});
 
-// 后台首页/类别管理
-Breadcrumbs::register('category', function ($breadcrumbs) {
-    $breadcrumbs->parent('admin/home');
-    $breadcrumbs->push('类别管理', url('admin/category'));
-});
 
 // 后台首页/文章管理
 Breadcrumbs::register('article', function ($breadcrumbs) {

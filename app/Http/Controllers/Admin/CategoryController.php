@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use App\Models\Commodity;
+use App\Models\Good;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -33,9 +36,9 @@ class CategoryController extends Controller
         if ($list) {
             foreach ($list as $key => $val) {
                 if ($val['name']) {
-                    $val['name'] .= '(' . $val['name'] . ')';
+//                    $val['name'] .= '(' . $val['name'] . ')';
                 }
-                if (!$val['status']) {
+                if ($val['status']==0) {
                     $val['name'] .= '(已禁用)';
                 }
 //                $val['url'] = url('admin/category/'.$val['id'].'/edit');
@@ -65,11 +68,16 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $category = new Category();
         $category->name = $request->name;
-        $category->alias = $request->alias;
+        if($request->alias){
+            $category->alias = $request->alias;
+        }else{
+            $pinyin = app('pinyin');
+            $category->alias =  $pinyin->sentence($request->name);
+        }
         $category->pid = $request->pid;
         $category->status = $request->status;
         if($request->pid){
@@ -122,13 +130,64 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => Rule::unique('categories')->ignore($id),
+            'alias' => Rule::unique('categories')->ignore($id)
+        ],[
+            'name.unique'=>'类别名称已存在',
+            'alias.unique'=>'类别别名已存在',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->getMessageBag()->getMessages() as $v){
+                foreach ($v as $value){
+                    $errors .= $value.',';
+                }
+            }
+            $errors = trim($errors,",");
+            $message = [
+                'code' => 0,
+                'message' => $errors
+            ];
+            return response()->json($message);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => Rule::unique('categories')->ignore($id)
+        ],[
+            'name.unique'=>'类别名称已存在',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->getMessageBag()->getMessages() as $v){
+                foreach ($v as $value){
+                    $errors .= $value.',';
+                }
+            }
+            $errors = trim($errors,",");
+            $message = [
+                'code' => 0,
+                'message' => $errors
+            ];
+            return response()->json($message);
+        }
+
         $arr = [
             'name' => $request->name,
-            'alias' => $request->alias,
             'pid' => $request->pid,
         ];
+
+        if($request->alias){
+            $arr['alias'] = $request->alias;
+        }else{
+            $pinyin = app('pinyin');
+            $arr['alias'] =  $pinyin->sentence($request->name);
+        }
+
         if($request->pid){
             $arr['path'] = Category::where("id",$request->pid)->value("path").$request->pid.',';
         }else{
@@ -167,7 +226,7 @@ class CategoryController extends Controller
                 'message' => '此类别下面还有子类别，不能删除'
             ];
         }else{
-            if(Commodity::where('category_id',$id)->first()){
+            if(Good::where('category_id',$id)->first()){
                 $message = [
                     'code' => 0,
                     'message' => '此类别下面还有商品，不能删除'

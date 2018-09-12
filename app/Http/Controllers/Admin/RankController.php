@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
-use App\User;
+use App\Http\Requests\RankRequest;
+use App\Models\Rank;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class RankController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,16 +19,18 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $map = [
-            ['status',">=",0]
+            ['status','>=',0]
         ];
         if($request->search){
             $search = $request->search;
-            $map[] = ['name','like',"%".$search."%"];
+            $map[] = [
+                'name','like','%'.$search.'%'
+            ];
         }else{
-            $search = '';
+            $search = null;
         }
-        $list = User::where($map)->paginate(5);
-        return view('admin.user.index',compact('list','search'));
+        $list = Rank::where($map)->paginate(5);
+        return view('admin.rank.index',compact('list','search'));
     }
 
     /**
@@ -38,7 +40,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.add');
+        return view('admin.rank.add');
     }
 
     /**
@@ -47,27 +49,30 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(RankRequest $request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->phone = $request->phone;
-        $user->email = $request->phone;
-        $user->password = encrypt($request->password);
-        $user->status = $request->status;
+        $rank = new Rank();
+        $rank->name = $request->name;
+        $rank->code = $request->code;
+        $rank->min_points = $request->min_points;
+        $rank->max_points = $request->max_points;
+        $rank->discount = $request->discount;
+        $rank->special_rank = $request->special_rank;
+        $rank->status = $request->status;
 
-        if($user->save()){
+        if($rank->save()){
             $message = [
                 'code' => 1,
-                'message' => '用户添加成功'
+                'message' => '会员等级添加成功'
             ];
         }else{
-            $message =[
+            $message = [
                 'code' => 0,
-                'message' => '用户添加失败，请稍后重试'
+                'message' => '会员等级添加失败，请稍后重试'
             ];
         }
         return response()->json($message);
+
     }
 
     /**
@@ -89,8 +94,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $info = User::find($id);
-        return view('admin.user.edit',compact('info'));
+        $info = Rank::find($id);
+        return view("admin.rank.edit",compact('info'));
     }
 
     /**
@@ -100,19 +105,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(RankRequest $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
-                'name' => Rule::unique('users')->ignore($id),
-                'email' => Rule::unique('users')->ignore($id),
-                'phone' => Rule::unique('users')->ignore($id),
-            ],[
-                'name.unique'=>'该用户名已存在',
-                'email.unique'=>'该邮箱已存在',
-                'phone.unique'=>'该手机号已存在',
-            ]
-        );
+            'code' => Rule::unique('ranks')->ignore($id)
+        ],[
+            'code.unique'=>'该会员等级编号已存在',
+        ]);
 
         if ($validator->fails()) {
             $errors = '';
@@ -131,22 +131,23 @@ class UserController extends Controller
 
         $arr = [
             'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
+            'code' => $request->code,
+            'min_points' => $request->min_points,
+            'max_points' => $request->max_points,
+            'discount' => $request->discount,
+            'special_rank' => $request->special_rank,
             'status' => $request->status
         ];
-        if($request->password){
-            $arr['password'] = encrypt($request->password);
-        }
-        if(User::where('id',$id)->update($arr)){
+
+        if(Rank::where('id',$id)->update($arr)){
             $message = [
                 'code' => 1,
-                'message' => '后台用户信息修改成功'
+                'message' => '会员等级信息修改成功'
             ];
         }else{
             $message = [
                 'code' => 0,
-                'message' => '后台用户信息修改失败，请稍后重试'
+                'message' => '会员等级信息修改失败，请稍后重试'
             ];
         }
         return response()->json($message);
@@ -163,28 +164,20 @@ class UserController extends Controller
         //把ids字符串拆分成数组
         $idArr = explode(",",$id);
         foreach ($idArr as $v) {
-            if(!User::where('id',$v)->value('is_admin')){
-                $info = User::where("id", $v)->update(['status' => -1]);
-                if ($info) {
-                    continue;
-                } else {
-                    $message = [
-                        'code' => 0,
-                        'message' => '用户信息删除失败，请稍后重试'
-                    ];
-                    return response()->json($message);
-                }
-            }else{
+            $info = Rank::where("id", $v)->update(['status' => -1]);
+            if ($info) {
+                continue;
+            } else {
                 $message = [
                     'code' => 0,
-                    'message' => '超级管理员不能删除'
+                    'message' => '会员等级信息删除失败，请稍后重试'
                 ];
                 return response()->json($message);
             }
         }
         $message = [
             'code' => 1,
-            'message' => '后台用户信息删除成功'
+            'message' => '会员等级信息删除成功'
         ];
         return response()->json($message);
     }

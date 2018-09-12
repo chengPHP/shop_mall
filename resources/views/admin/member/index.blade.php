@@ -4,7 +4,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
             <h2>商城后台</h2>
-            {!! Breadcrumbs::render('user'); !!}
+            {!! Breadcrumbs::render('member'); !!}
         </div>
     </div>
 
@@ -14,11 +14,11 @@
                 <div class="ibox float-e-margins">
 
                     <div class="ibox-title">
-                        <button onclick="add()" class="btn btn-m btn-primary" id="add-btn" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus"></i> 添加</button>
-                        <button onclick="delUsers()" class="btn btn-m btn-danger" id="add-btn"><i class="fa fa-trash-o"></i> 删除</button>
+                        <button onclick="add()" class="btn btn-m btn-primary" id="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> 添加</button>
+                        <button onclick="delMembers()" class="btn btn-m btn-danger" id="add-btn"><i class="fa fa-trash-o"></i> 删除</button>
                         <div class="col-sm-5" style="float: right;" >
                             <div class="input-group">
-                                <input type="text" id="search-text" placeholder="邮箱" value="{{$search}}" class="form-control">
+                                <input type="text" id="search-text" placeholder="手机号" value="{{$search}}" class="form-control">
                                 <span class="input-group-btn">
                                   <button type="button" class="btn blue" id="simple-search"><i class="fa fa-search"></i> 查询</button>
                                   <a href="javascript:;" class="btn btn-outline btn-default" id="refreshTable"><i class="fa fa-refresh"></i> 刷新</a>
@@ -33,9 +33,12 @@
                                     <th><input class="icheck_input_all" type="checkbox"></th>
                                     <th>id</th>
                                     <th>状态</th>
+                                    <th>昵称</th>
                                     <th>姓名</th>
                                     <th>手机号</th>
                                     <th>邮箱</th>
+                                    <th>会员等级</th>
+                                    <th>会员积分</th>
                                     <th>设置</th>
                                 </tr>
                             </thead>
@@ -51,14 +54,15 @@
                                                 启用
                                             @endif
                                         </td>
+                                        <td>{{$v['nickname']}}</td>
                                         <td>{{$v['name']}}</td>
                                         <td>{{$v['phone']?$v['phone']:'暂无'}}</td>
                                         <td>{{$v['email']}}</td>
+                                        <td>{{$v['rank']['name']}}</td>
+                                        <td>{{$v['rank_points']}}</td>
                                         <td>
-                                            <span class="btn btn-xs btn-info" title="修改信息" onclick="updateUser('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-wrench"></i> 修改</span>
-                                            @if(!$v['is_admin'])
-                                            <span class="btn btn-xs btn-danger" title="删除用户" onclick="deleteUser('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
-                                            @endif
+                                            <span class="btn btn-xs btn-info" title="修改信息" onclick="updateMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-wrench"></i> 修改</span>
+                                            <span class="btn btn-xs btn-danger" title="删除会员" onclick="deleteMember('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -93,24 +97,24 @@
         });
 
         function add() {
-            $(".bs-example-modal-md .modal-content").html();
+            $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
-                url: "{{ url('admin/user/create') }}",
+                url: "{{ url('admin/member/create') }}",
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
                 beforeSend: function () {
                 },
                 success: function (data, textStatus, xhr) {
-                    $(".bs-example-modal-md .modal-content").html(data);
+                    $(".bs-example-modal-lg .modal-content").html(data);
                 }
             });
         }
 
-        function updateUser(id) {
+        function updateMember(id) {
             $(".bs-example-modal-md .modal-content").html();
             $.ajax({
-                url: "{{url('admin/user')}}/"+id+'/edit',
+                url: "{{url('admin/member')}}/"+id+'/edit',
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -169,11 +173,11 @@
         }
 
 
-        function deleteUser(id) {
-            deleteItems(id,"{{url('admin/user')}}","确定删除该用户吗？");
+        function deleteMember(id) {
+            deleteItems(id,"{{url('admin/member')}}","确定删除该会员信息吗？");
         }
 
-        function delUsers() {
+        function delMembers() {
             var checkStatus = $("tbody input[type='checkbox']:checked");
             if(checkStatus.length >= 1){
                 var ids = [];
@@ -181,7 +185,7 @@
                     ids.push(v.value);
                 });
                 ids = ids.toString();
-                deleteItems(ids,"{{url('admin/user')}}","确定删除这些用户吗？");
+                deleteItems(ids,"{{url('admin/member')}}","确定删除这些会员信息吗？");
 
             }else{
                 swal("请选择至少一条数据！", "", "warning");
@@ -190,7 +194,7 @@
         }
 
         $("#simple-search").on('click',function () {
-            window.location.href = "{{url('admin/user')}}?search="+$("#search-text").val();
+            window.location.href = "{{url('admin/member')}}?search="+$("#search-text").val();
         });
 
 

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('status')->default("1")->comment("用户当前状态 -1|软删除 0|禁用 1|启用");
-            $table->string('is_admin')->default()->comment("是否为超级管理员 1|是");
+            $table->string('is_admin')->nullable()->comment("是否为超级管理员 1|是");
             $table->rememberToken();
             $table->timestamps();
         });

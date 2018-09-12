@@ -171,6 +171,9 @@ return [
 
         //菜单面包屑
 //        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+
+        //中文转拼音
+        Overtrue\LaravelPinyin\ServiceProvider::class,
     ],
 
     /*
@@ -231,6 +234,9 @@ return [
 
         //菜单面包屑
 //        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+
+        //中文转拼音
+        'Pinyin' => Overtrue\LaravelPinyin\Facades\Pinyin::class,
 
     ],
 

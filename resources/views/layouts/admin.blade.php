@@ -58,7 +58,8 @@
     <!-- ztree -->
     <link rel="stylesheet" href="{{asset('admin/css/plugins/text-spinners/spinners.css')}}"  media="all">
 
-
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/bootstrap-daterangepicker/daterangepicker.css')}}">
 
     {{--custom--}}
     <link href="{{asset('admin/css/custom.css')}}" rel="stylesheet">
@@ -333,9 +334,12 @@
 <script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js')}}"></script>
 
+<!-- bootstrap-daterangepicker -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-daterangepicker/moment.min.js')}}" ></script>
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-daterangepicker/daterangepicker.js')}}" ></script>
+
 {{-- jeDate --}}
 <script type="text/javascript" src="{{asset('admin/js/plugins/jeDate/src/jedate.js')}}"></script>
-
 
 {{-- loading --}}
 <script src="{{asset('admin/js/plugins/loading/js/loading.js')}}"></script>

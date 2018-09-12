@@ -1,66 +1,78 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">添加后台用户</h4>
+    <h4 class="modal-title">修改会员等级信息</h4>
 </div>
-<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/user')}}">
+<form method="post" class="form-horizontal" action="{{url('admin/rank')}}/{{$info->id}}">
     <div class="modal-body">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">等级名称</label>
+            <div class="col-sm-10">
+                <input id="name" type="text" name="name" value="{{$info->name}}" placeholder="等级名称" class="form-control">
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
 
-        {{--错误信息提示--}}
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        <div class="form-group">
+            <label for="code" class="col-sm-2 control-label">等级编号</label>
+            <div class="col-sm-10">
+                <input id="code" type="text" name="code" value="{{$info->code}}" placeholder="等级编号" class="form-control">
             </div>
-        @endif
+        </div>
+        <div class="hr-line-dashed"></div>
 
-        {{csrf_field()}}
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">姓名</label>
+            <label for="min_points" class="col-sm-2 control-label">最低积分</label>
             <div class="col-sm-10">
-                <input id="name" type="text" name="name" value="" class="form-control">
+                <input id="min_points" type="text" name="min_points" value="{{$info->min_points}}" placeholder="该等级的最低积分" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
+
         <div class="form-group">
-            <label for="phone" class="col-sm-2 control-label">手机号</label>
+            <label for="max_points" class="col-sm-2 control-label">最高积分</label>
             <div class="col-sm-10">
-                <input id="phone" type="text" name="phone" value="" class="form-control">
+                <input id="max_points" type="text" name="max_points" value="{{$info->max_points}}" placeholder="该等级的最高积分" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
+
         <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">邮箱</label>
+            <label for="discount" class="col-sm-2 control-label">商品折扣</label>
             <div class="col-sm-10">
-                <input id="email" type="email" name="email" value="" class="form-control">
+                <div class="input-group">
+                    <input id="discount" type="text" name="discount" value="{{$info->discount}}" placeholder="该会员等级的商品折扣，范围:0-100" class="form-control">
+                    <span class="input-group-addon">折</span>
+                </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
+
         <div class="form-group">
-            <label for="password" class="col-sm-2 control-label">密码</label>
+            <label class="col-sm-2 control-label">特殊会员等级组</label>
             <div class="col-sm-10">
-                <input id="password" type="password" class="form-control" name="password" required>
+                <div class="radio radio-info radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio3" value="1" name="special_rank" {{$info->special_rank==1 ? 'checked': ''}}>
+                    <label for="inlineRadio3">是 </label>
+                </div>
+                <div class="radio radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio4" value="0" name="special_rank" {{$info->special_rank==0 ? 'checked': ''}}>
+                    <label for="inlineRadio4">否 </label>
+                </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="password-confirm" class="col-sm-2 control-label">确认密码</label>
-            <div class="col-sm-10">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
+
         <div class="form-group">
             <label class="col-sm-2 control-label">状态</label>
             <div class="col-sm-10">
                 <div class="radio radio-info radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" checked="">
+                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" {{$info->status==1 ? 'checked': ''}}>
                     <label for="inlineRadio1">启用 </label>
                 </div>
                 <div class="radio radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status">
+                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status" {{$info->status==0 ? 'checked': ''}}>
                     <label for="inlineRadio2">禁用 </label>
                 </div>
             </div>
@@ -71,6 +83,7 @@
         <button type="button" onclick="tijiao(this)" class="btn btn-primary">提交</button>
     </div>
 </form>
+
 <script type="text/javascript" >
     //页面加载完成后初始化select2控件
     $(document).ready(function() {
@@ -82,12 +95,12 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
-
     });
+
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/user')}}",
+            url: "{{url('admin/rank')}}/{{$info->id}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {
