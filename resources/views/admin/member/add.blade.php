@@ -146,7 +146,6 @@
                 </div>
             </div>
 
-
             <div class="col-md-6" >
                 <div class="form-group">
                     <label class="col-sm-2 control-label">状态</label>

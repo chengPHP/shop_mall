@@ -13,6 +13,25 @@ Breadcrumbs::register('user', function ($breadcrumbs) {
     $breadcrumbs->push('用户管理', url('admin/user'));
 });
 
+
+
+// 后台首页/会员管理
+Breadcrumbs::register('member', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('会员管理', url('admin/member'));
+});
+// 后台首页/会员等级管理
+Breadcrumbs::register('rank', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('会员等级管理', url('admin/rank'));
+});
+// 后台首页/城市管理
+Breadcrumbs::register('region', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('城市管理', url('admin/region'));
+});
+
+
 // 后台首页/类别管理
 Breadcrumbs::register('category', function ($breadcrumbs) {
     $breadcrumbs->parent('admin/home');
@@ -24,25 +43,6 @@ Breadcrumbs::register('brand', function ($breadcrumbs) {
     $breadcrumbs->parent('admin/home');
     $breadcrumbs->push('品牌管理', url('admin/brand'));
 });
-
-// 后台首页/会员等级管理
-Breadcrumbs::register('rank', function ($breadcrumbs) {
-    $breadcrumbs->parent('admin/home');
-    $breadcrumbs->push('会员等级管理', url('admin/rank'));
-});
-
-// 后台首页/会员管理
-Breadcrumbs::register('member', function ($breadcrumbs) {
-    $breadcrumbs->parent('admin/home');
-    $breadcrumbs->push('会员管理', url('admin/member'));
-});
-
-// 后台首页/城市管理
-Breadcrumbs::register('region', function ($breadcrumbs) {
-    $breadcrumbs->parent('admin/home');
-    $breadcrumbs->push('城市管理', url('admin/region'));
-});
-
 // 后台首页/颜色管理
 Breadcrumbs::register('color', function ($breadcrumbs) {
     $breadcrumbs->parent('admin/home');

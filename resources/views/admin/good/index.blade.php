@@ -36,6 +36,7 @@
                                     <th>状态</th>
                                     <th>商品名称</th>
                                     <th>所属类别</th>
+                                    <th>图片</th>
                                     <th>商品唯一编号</th>
                                     <th>商品浏览量</th>
                                     <th>所属品牌</th>
@@ -44,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list as $v)
+                                @foreach($list as $k=>$v)
                                     <tr>
                                         <td><input class="icheck_input" type="checkbox" value="{{$v['id']}}"></td>
                                         <td>{{$v['id']}}</td>
@@ -57,6 +58,13 @@
                                         </td>
                                         <td>{{$v['name']}}</td>
                                         <td>{{$v->category['name']}}</td>
+                                        <td>
+                                            @foreach($v->files as $value)
+                                                <a href="{{url($value['path'])}}" data-lightbox="{{$k}}">
+                                                    <img src="{{asset($value['path'])}}" style="max-width: 30px;max-height: 30px;">
+                                                </a>
+                                            @endforeach
+                                        </td>
                                         <td>{{$v['sn']}}</td>
                                         <td>{{$v['click_number']}}</td>
                                         <td>{{$v->brand['name']}}</td>

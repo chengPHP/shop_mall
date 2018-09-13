@@ -25,7 +25,8 @@ class GoodController extends Controller
         }else{
             $search = null;
         }
-        $list = Good::where($map)->with('attr','brand','category')->paginate(5);
+        $list = Good::where($map)->with('attr','brand','category','files')->paginate(5);
+//        dd($list);
         return view('admin.good.index',compact('list','search'));
     }
 
@@ -68,7 +69,13 @@ class GoodController extends Controller
 
 
         if($good->save()) {
+            //关联商品图片
+            if($request->file_id){
+                $file_arr = explode(',',trim($request->file_id,','));
+                $good->files()->sync($file_arr);
+            }
             $attr_id_arr = [];
+
             if(count($request->model_number)>0){
                 foreach ($request->model_number as $k => $v) {
                     $arr = [
@@ -111,7 +118,7 @@ class GoodController extends Controller
      */
     public function show($id)
     {
-        $info = Good::where('id',$id)->with('attr','brand','category')->first();
+        $info = Good::where('id',$id)->with('attr','brand','category','files')->first();
         return view('admin.good.show',compact('info'));
     }
 
@@ -123,7 +130,7 @@ class GoodController extends Controller
      */
     public function edit($id)
     {
-        $info = Good::where('id',$id)->with('attr','brand','category')->first();
+        $info = Good::where('id',$id)->with('attr','brand','category','files')->first();
         return view('admin.good.edit',compact('info'));
     }
 

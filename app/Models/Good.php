@@ -18,4 +18,9 @@ class Good extends Model
     public function category(){
         return $this->belongsTo('App\Models\Category');
     }
+
+    //商品图片
+    public function files(){
+        return $this->belongsToMany('App\Models\File');
+    }
 }

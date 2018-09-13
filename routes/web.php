@@ -23,22 +23,25 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     Route::get('home', 'HomeController@index');
     //后台用户管理
     Route::resource('user','UserController');
+
+
     //商品类别管理
     Route::resource('category','CategoryController');
     //品牌管理
     Route::resource('brand','BrandController');
     //商品管理
-    Route::resource('goods','GoodsController');
+    Route::resource('good','GoodController');
+    //颜色管理
+    Route::resource('color','ColorController');
+
+
     //会员等级管理
     Route::resource('rank','RankController');
     //会员管理
     Route::resource('member','MemberController');
     //城市管理
     Route::resource('region','RegionController');
-    //颜色管理
-    Route::resource('color','ColorController');
-    //商品管理
-    Route::resource('good','GoodController');
+
 
 });
 

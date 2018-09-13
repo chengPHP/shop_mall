@@ -187,6 +187,24 @@
                             </div>
 
                             <div class="row" >
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="Comment" class="col-sm-2 control-label">商品图片</label>
+                                        <div class="col-sm-10">
+                                            <div id="imgs" >
+                                                <img id="thumb_img" src="{{url('img/nopicture.jpg')}}" alt="" class="img-md">
+                                            </div>
+                                            <input type="hidden" id="upload_id" name="file_id" value="">
+                                            <div id="single-upload" class="btn-upload m-t-xs">
+                                                <div id="filePicker" class="pickers"><i class="fa fa-upload"></i> 选择图片</div>
+                                                <div id="single-upload-file-list"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" >
                                 <div class="col-md-12" >
                                     <a href="javascript:;" onclick="addStr()" class="add btn btn-md btn-success" >增加一栏</a>
                                     <a href="javascript:;" class="reduce btn btn-md btn-danger" >减去指定栏</a>
@@ -231,6 +249,7 @@
                             </div>
 
 
+
                             <div class="modal-footer">
                                 <button type="button" onclick="tijiao(this)" class="btn btn-primary">提交</button>
                                 <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
@@ -243,6 +262,84 @@
     </div>
 
     <script type="text/javascript" >
+
+        $(document).ready(function () {
+            // 初始化Web Uploader
+            var uploader = WebUploader.create({
+
+                // 选完文件后，是否自动上传。
+                auto: true,
+
+                // swf文件路径
+                swf: '{{ asset("admin/js/plugins/webuploader/Uploader.swf") }}',
+
+                // 文件接收服务端。
+                server: "{{ route('image.upload') }}",
+
+                formData: {
+                    '_token':'{{ csrf_token() }}'
+                },
+
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: '#filePicker',
+
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/*'
+                }
+            });
+
+            // 当有文件添加进来的时候
+            uploader.on( 'fileQueued', function( file ) {
+                var $li = $(
+                        '<div id="' + file.id + '" class="file-item thumbnail">' +
+                        '<img>' +
+                        '<div class="info">' + file.name + '</div>' +
+                        '</div>'
+                    ),
+                    $img = $li.find('img');
+
+                var $list = $("#fileList");
+
+                // $list为容器jQuery实例
+                $list.append( $li );
+
+            });
+
+
+            // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+            uploader.on( 'uploadSuccess', function( file, response ) {
+                $( '#'+file.id ).addClass('upload-state-done');
+                var id = response.ids.id;
+                var str_id = $("#upload_id").val()+','+id;
+                $("#upload_id").val(str_id);
+//                $("#thumb_img").attr('src',response.ids.url);
+                var str = "<img src='"+response.ids.url+"' class='img-md'>";
+                $("#imgs").append(str);
+            });
+
+            // 文件上传失败，显示上传出错。
+            uploader.on( 'uploadError', function( file ) {
+                var $li = $( '#'+file.id ),
+                    $error = $li.find('div.error');
+
+                // 避免重复创建
+                if ( !$error.length ) {
+                    $error = $('<div class="error"></div>').appendTo( $li );
+                }
+
+                $error.text('上传失败');
+            });
+
+            // 完成上传完了，成功或者失败，先删除进度条。
+            uploader.on( 'uploadComplete', function( file ) {
+                $( '#'+file.id ).find('.progress').remove();
+            });
+
+        });
 
         function addStr() {
             $(".table-bordered tbody").append(
