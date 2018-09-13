@@ -6,5 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Good extends Model
 {
-    //
+    //商品属性
+    public function attr(){
+        return $this->belongsToMany('App\Models\Attr');
+    }
+
+    public function brand(){
+        return $this->belongsTo('App\Models\Brand');
+    }
+
+    public function category(){
+        return $this->belongsTo('App\Models\Category');
+    }
 }

@@ -4,7 +4,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
             <h2>商城后台</h2>
-            {!! Breadcrumbs::render('member'); !!}
+            {!! Breadcrumbs::render('good'); !!}
         </div>
     </div>
 
@@ -14,11 +14,12 @@
                 <div class="ibox float-e-margins">
 
                     <div class="ibox-title">
-                        <button onclick="add()" class="btn btn-m btn-primary" id="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> 添加</button>
-                        <button onclick="delMembers()" class="btn btn-m btn-danger" id="add-btn"><i class="fa fa-trash-o"></i> 删除</button>
+                        <a href="{{url('admin/good/create')}}" class="btn btn-m btn-primary" id="add-btn"><i class="fa fa-plus"></i> 添加</a>
+                        {{--<button onclick="add()" class="btn btn-m btn-primary" id="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> 添加</button>--}}
+                        {{--<button onclick="delGoods()" class="btn btn-m btn-danger" id="add-btn"><i class="fa fa-trash-o"></i> 删除</button>--}}
                         <div class="col-sm-5" style="float: right;" >
                             <div class="input-group">
-                                <input type="text" id="search-text" placeholder="手机号" value="{{$search}}" class="form-control">
+                                <input type="text" id="search-text" placeholder="商品名称" value="{{$search}}" class="form-control">
                                 <span class="input-group-btn">
                                   <button type="button" class="btn blue" id="simple-search"><i class="fa fa-search"></i> 查询</button>
                                   <a href="javascript:;" class="btn btn-outline btn-default" id="refreshTable"><i class="fa fa-refresh"></i> 刷新</a>
@@ -33,13 +34,12 @@
                                     <th><input class="icheck_input_all" type="checkbox"></th>
                                     <th>id</th>
                                     <th>状态</th>
-                                    <th>昵称</th>
-                                    <th>头像</th>
-                                    <th>姓名</th>
-                                    <th>手机号</th>
-                                    <th>邮箱</th>
-                                    <th>会员等级</th>
-                                    <th>会员积分</th>
+                                    <th>商品名称</th>
+                                    <th>所属类别</th>
+                                    <th>商品唯一编号</th>
+                                    <th>商品浏览量</th>
+                                    <th>所属品牌</th>
+                                    <th>商品关键字</th>
                                     <th>设置</th>
                                 </tr>
                             </thead>
@@ -55,23 +55,16 @@
                                                 启用
                                             @endif
                                         </td>
-                                        <td>{{$v['nickname']}}</td>
-                                        <td>
-                                            @if($v->get_member_head)
-                                                <a href="{{url($v->get_member_head['path'])}}" data-lightbox="roadtrip">
-                                                    <img src="{{asset($v->get_member_head['path'])}}" style="max-width: 20px;max-height: 20px;">
-                                                </a>
-                                            @endif
-                                        </td>
                                         <td>{{$v['name']}}</td>
-                                        <td>{{$v['phone']?$v['phone']:'暂无'}}</td>
-                                        <td>{{$v['email']}}</td>
-                                        <td>{{$v['rank']['name']}}</td>
-                                        <td>{{$v['rank_points']}}</td>
+                                        <td>{{$v->category['name']}}</td>
+                                        <td>{{$v['sn']}}</td>
+                                        <td>{{$v['click_number']}}</td>
+                                        <td>{{$v->brand['name']}}</td>
+                                        <td>{{$v['keywords']}}</td>
                                         <td>
-                                            <span class="btn btn-xs btn-info" title="详情信息" onclick="showMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
-                                            <span class="btn btn-xs btn-info" title="修改信息" onclick="updateMember('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 修改</span>
-                                            <span class="btn btn-xs btn-danger" title="删除会员信息" onclick="deleteMember('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
+                                            <span class="btn btn-xs btn-info" title="详情信息" onclick="showGood('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
+                                            <a class="btn btn-xs btn-info" title="修改信息" href="{{url('admin/good/'.$v['id'].'/edit')}}"><i class="fa fa-wrench"></i> 修改</a>
+                                            {{--<span class="btn btn-xs btn-danger" title="删除会员信息" onclick="deleteGood('{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>--}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -108,7 +101,7 @@
         function add() {
             $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
-                url: "{{ url('admin/member/create') }}",
+                url: "{{ url('admin/good/create') }}",
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -120,10 +113,10 @@
             });
         }
 
-        function updateMember(id) {
+        function updateGood(id) {
             $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
-                url: "{{url('admin/member')}}/"+id+'/edit',
+                url: "{{url('admin/good')}}/"+id+'/edit',
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -135,10 +128,10 @@
             });
         }
 
-        function showMember(id) {
+        function showGood(id) {
             $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
-                url: "{{url('admin/member')}}/"+id,
+                url: "{{url('admin/good')}}/"+id,
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -197,11 +190,11 @@
         }
 
 
-        function deleteMember(id) {
-            deleteItems(id,"{{url('admin/member')}}","确定删除该会员信息吗？");
+        function deleteGood(id) {
+            deleteItems(id,"{{url('admin/good')}}","确定删除该商品信息吗？");
         }
 
-        function delMembers() {
+        function delGoods() {
             var checkStatus = $("tbody input[type='checkbox']:checked");
             if(checkStatus.length >= 1){
                 var ids = [];
@@ -209,7 +202,7 @@
                     ids.push(v.value);
                 });
                 ids = ids.toString();
-                deleteItems(ids,"{{url('admin/member')}}","确定删除这些会员信息吗？");
+                deleteItems(ids,"{{url('admin/good')}}","确定删除这些商品信息吗？");
 
             }else{
                 swal("请选择至少一条数据！", "", "warning");
@@ -218,7 +211,7 @@
         }
 
         $("#simple-search").on('click',function () {
-            window.location.href = "{{url('admin/member')}}?search="+$("#search-text").val();
+            window.location.href = "{{url('admin/good')}}?search="+$("#search-text").val();
         });
 
 

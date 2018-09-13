@@ -120,22 +120,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" >
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">状态</label>
-                    <div class="col-sm-10">
-                        <div class="radio radio-info radio-inline">
-                            <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" {{$info->status==1?'checked':''}}>
-                            <label for="inlineRadio1">启用</label>
-                        </div>
-                        <div class="radio radio-inline">
-                            <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status" {{$info->status==0?'checked':''}}>
-                            <label for="inlineRadio2">禁用</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="Comment" class="col-sm-4 control-label">照片</label>
@@ -154,6 +138,21 @@
                 </div>
             </div>
 
+            <div class="col-md-6" >
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-info radio-inline">
+                            <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" {{$info->status==1?'checked':''}}>
+                            <label for="inlineRadio1">启用</label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status" {{$info->status==0?'checked':''}}>
+                            <label for="inlineRadio2">禁用</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

@@ -52,6 +52,9 @@ class CreateGoodsTable extends Migration
             $table->string("seller_note")->default()->comment('商品的商家备注，仅商家可见');
             $table->string("give_integral")->default(0)->comment('购买该商品时每笔成功交易赠送的积分数量');
             $table->string("suppliers_id")->default()->comment('商品供应商id');
+            $table->text('details')->nullable()->comment('商品详情');
+            $table->text('spec')->nullable()->comment('规格参数');
+            $table->text('pack')->nullable()->comment('包装与售后');
             $table->integer("status")->default(1)->comment('状态：-1|已删除 0|下架 1|上架');
             $table->string("storage_time")->default()->comment('入库时间');
             $table->timestamps();

@@ -228,7 +228,7 @@ if(!function_exists("region_select")){
         if ($type == 1) {
             $str = '<option value="0">顶级城市</option>';
         } else {
-            $str = '<option value="0">请选择城市</option>';
+            $str = '<option>请选择城市</option>';
         }
         if ($list) {
             foreach ($list as $key => $val) {
@@ -260,6 +260,61 @@ if(!function_exists("get_region_name")) {
         }
 
         $str = trim($str, '/');
+        return $str;
+    }
+}
+
+if(!function_exists("color_select")){
+    function color_select($selected = 0, $type = 0, $id=null){
+        $list = \App\Models\Color::where([['status','>=',0]])->get();
+
+        if ($type == 1) {
+            $str = '<option value="0">顶级颜色</option>';
+        } else {
+            $str = '<option>请选择颜色</option>';
+        }
+        if ($list) {
+            foreach ($list as $key => $val) {
+                if ($selected) {
+                    $str .= '<option value="' . $val['id'] . '" '
+                        . ($selected==$val['id'] ? 'selected="selected"' : '')
+                        . ($id==$val['id'] ? 'disabled' : '') . '>'
+                        .$val['name'] . '</option>';
+                } else {
+                    $str .= '<option value="' . $val['id'] . '" ' . '>'
+                        .  $val['name'] . '</option>';
+                }
+            }
+        }
+        return $str;
+    }
+}
+
+/*
+ * 品牌
+ * */
+if(!function_exists("brand_select")){
+    function brand_select($selected = 0, $type = 0, $id=null){
+        $list = \App\Models\Brand::where([['status','>=',0]])->get();
+
+        if ($type == 1) {
+            $str = '<option value="0">顶级品牌</option>';
+        } else {
+            $str = '<option>请选择品牌</option>';
+        }
+        if ($list) {
+            foreach ($list as $key => $val) {
+                if ($selected) {
+                    $str .= '<option value="' . $val['id'] . '" '
+                        . ($selected==$val['id'] ? 'selected="selected"' : '')
+                        . ($id==$val['id'] ? 'disabled' : '') . '>'
+                        .$val['name'] . '</option>';
+                } else {
+                    $str .= '<option value="' . $val['id'] . '" ' . '>'
+                        .  $val['name'] . '</option>';
+                }
+            }
+        }
         return $str;
     }
 }

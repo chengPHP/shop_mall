@@ -27,6 +27,14 @@
     <a href="{{url('admin/region')}}"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">城市管理</span></a>
 </li>
 
+<li class="{{ active_class(if_uri_pattern('admin/color*')) }}">
+    <a href="{{url('admin/color')}}"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">颜色管理</span></a>
+</li>
+
+<li class="{{ active_class(if_uri_pattern('admin/good*')) }}">
+    <a href="{{url('admin/good')}}"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">商品管理</span></a>
+</li>
+
 {{--<li class="{{ active_class(if_uri_pattern('admin/article*')) }}">
     <a href="{{url('admin/article')}}"><i class="fa fa-folder-open"></i> <span class="nav-label">文章管理</span> <span
                 class="fa arrow"></span></a>

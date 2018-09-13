@@ -43,6 +43,22 @@ Breadcrumbs::register('region', function ($breadcrumbs) {
     $breadcrumbs->push('城市管理', url('admin/region'));
 });
 
+// 后台首页/颜色管理
+Breadcrumbs::register('color', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('颜色管理', url('admin/color'));
+});
+
+// 后台首页/商品管理
+Breadcrumbs::register('good', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin/home');
+    $breadcrumbs->push('商品管理', url('admin/good'));
+});
+
+
+
+
+
 
 // 后台首页/角色管理
 Breadcrumbs::register('role', function ($breadcrumbs) {
