@@ -10,6 +10,7 @@ class CreateAttrsTable extends Migration
      * Run the migrations.
      *
      * @return void
+     * 商品SKU
      */
     public function up()
     {
@@ -20,8 +21,10 @@ class CreateAttrsTable extends Migration
             $table->string('price')->nullable()->comment('商品原价格 单位:元');
             $table->string('promote_price')->nullable()->comment('优惠价格 单位:元');
             $table->integer('stock')->default(0)->comment('商品库存量');
+//            $table->integer('good_id')->nullable()->comment("所属商品id");
             $table->integer('status')->default()->comment('状态 -1|下架 0|暂时缺货 1|正常 2|新品');
             $table->timestamps();
+//            $table->integer(['color_id','good_id']);
         });
     }
 

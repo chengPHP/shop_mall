@@ -97,10 +97,10 @@ $(document).ready(function () {
 
     // Append config box / Only for demo purpose
     // Uncomment on server mode to enable XHR calls
-    $.get("skin-config.html", function (data) {
-        if (!$('body').hasClass('no-skin-config'))
-            $('body').append(data);
-    });
+    // $.get("skin-config.html", function (data) {
+    //     if (!$('body').hasClass('no-skin-config'))
+    //         $('body').append(data);
+    // });
 
     // Minimalize menu
     $('.navbar-minimalize').on('click', function () {
@@ -108,13 +108,6 @@ $(document).ready(function () {
         SmoothlyMenu();
 
     });
-
-    // Tooltips demo
-    $('.tooltip-demo').tooltip({
-        selector: "[data-toggle=tooltip]",
-        container: "body"
-    });
-
 
     // Full height of sidebar
     function fix_height() {
@@ -169,13 +162,8 @@ $(document).ready(function () {
         }
     });
 
-    $("[data-toggle=popover]")
-        .popover();
 
     // Add slimscroll to element
-    $('.full-height-scroll').slimscroll({
-        height: '100%'
-    })
 });
 
 

@@ -1,159 +1,393 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh">
+
 <head>
-    <meta charset="UTF-8">
-    <title>CCM 个人博客</title>
-    <meta name="keywords" content="CCM 个人博客">
-    <meta name="description" content="CCM 个人博客">
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('home/images/laozhang_avatar.png')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('home/layui/css/layui.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('home/css/style.css')}}">
-    <script type="text/javascript" src="{{asset('home/layui/layui.js')}}"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>前台管理 商城</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('home/images/laozhang_avatar.png')}}" >
+
+    {{-- jeDate --}}
+    <link type="text/css" rel="stylesheet" href="{{asset('admin/js/plugins/jeDate/test/jeDate-test.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('admin/js/plugins/jeDate/skin/jedate.css')}}">
+
+    {{-- loading --}}
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/loading/css/animate.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/loading/css/global.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/loading/css/loading.css')}}">
+
+    <link href="{{asset('admin/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
+
+    <!-- icheck style-->
+    <link href="{{asset('admin/js/plugins/iCheck/skins/all.css')}}" rel="stylesheet">
+
+    <!-- select2 style-->
+    <link href="{{ asset('admin/js/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/js/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet">
+
+    <link href="{{asset('admin/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
+
+
+    <!-- webuploader -->
+    <link href="{{asset('admin/js/plugins/webuploader/webuploader.css')}}" rel="stylesheet">
+
+    {{--图片预览--}}
+    <link href="{{asset('admin/js/plugins/lightbox2/dist/css/lightbox.min.css')}}" rel="stylesheet">
+
+    <!-- bootstrap-datepicker -->
+    <link href="{{asset('admin/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}" rel="stylesheet">
+
+    <!-- Mainly scripts -->
+    <script src="{{asset('admin/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{asset('admin/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('admin/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+    <script src="{{asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+    {{--sweetalert--}}
+    <link href="{{asset('admin/css/plugins/sweetalert/sweetalert.css')}}" rel="stylesheet">
+    <script src="{{asset('admin/js/plugins/sweetalert/sweetalert.min.js')}}" ></script>
+
+    <!-- ztree -->
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/zTree/css/zTreeStyle2/zTreeStyle2.css')}}"  media="all">
+
+    <!-- ztree -->
+    <link rel="stylesheet" href="{{asset('admin/css/plugins/text-spinners/spinners.css')}}"  media="all">
+
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{asset('admin/js/plugins/bootstrap-daterangepicker/daterangepicker.css')}}">
+
+    {{--custom--}}
+    <link href="{{asset('admin/css/custom.css')}}" rel="stylesheet">
+
+    {{--百度编辑器--}}
+    <script type="text/javascript" charset="utf-8" src="{{asset('admin/js/plugins/ueditor/ueditor.config.js')}}"></script>
+    <script type="text/javascript" charset="utf-8" src="{{asset('admin/js/plugins/ueditor/ueditor.all.min.js')}}"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="{{asset('admin/js/plugins/ueditor/lang/zh-cn/zh-cn.js')}}"></script>
+
+    {{--图片预览--}}
+    <script src="{{asset('admin/js/plugins/lightbox2/dist/js/lightbox.min.js')}}" ></script>
+
+    <style>
+        /*这段CSS样式是修复bootstrap3 模态框关闭，body边距bug*/
+        body{
+            padding-right: inherit !important;
+        }
+    </style>
+
 </head>
-<body>
-<!-- 头部 开始 -->
-<div class="layui-header header trans_3">
-    <div class="main index_main">
-        <a class="logo" href="{{url('/')}}"><img src="{{asset('home/images/logo.png')}}" alt="老张博客前台模版"></a>
-        <ul class="layui-nav" lay-filter="top_nav">
-            @foreach($navs as $k=>$v)
-                @if(!empty($v["_child"]))
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">{{$v['name']}}</a>
-                        <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                            @foreach($v['_child'] as $k1=>$v1)
-                                <dd><a href="{{url($v1['url'])}}">{{$v1['name']}}</a></dd>
-                            @endforeach
-                        </dl>
-                    </li>
-                @else
-                    <li class="layui-nav-item home"><a href="{{url($v['url'])}}">{{$v['name']}}</a></li>
-                @endif
-            @endforeach
-        </ul>
-        <div class="title">CCM 个人博客</div>
-        <!--<form action="" mothod="post" class="head_search trans_3 layui-form">
-            <div class="layui-form-item trans_3">
-                <span class="close trans_3"><i class="layui-icon">&#x1006;</i> </span>
-                <div class="layui-input-inline trans_3">
-                    <select name="model_id trans_3">
-                        <option value="1" selected >文章模型</option>
-                        <option value="2">图集模型</option>
-                    </select>
+
+<body class="pace-done fixed-sidebar skin-1 fixed-nav fixed-nav-basic">
+
+<div id="wrapper">
+
+    {{--菜单栏部分--}}
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle" src="{{asset('admin/img/profile_small.jpg')}}" />
+                             </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">
+                                        张三
+                                    </strong>
+                                </span>
+                                <span class="text-muted text-xs block">
+                                    个人信息 <b class="caret"></b>
+                                </span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            {{--<li>
+                                <a href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    退出
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </li>--}}
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        CCM
+                    </div>
+                </li>
+                @include('layouts.home_menu')
+            </ul>
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            {{--<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">--}}
+            <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                 </div>
-                <input type="text" name="keywords" placeholder="搜索" autocomplete="off" class="search_input trans_3">
-                <button class="layui-btn" lay-submit="" style="display: none;"></button>
-            </div>
-        </form>-->
-    </div>
-</div>
-<div class="header_back"></div>
-<!-- 头部 结束 -->
-<!-- 左边导航 开始 -->
-<div class="layui-side layui-bg-black left_nav trans_2">
-    <div class="layui-side-scroll">
-        <ul class="layui-nav layui-nav-tree"  lay-filter="left_nav">
-            @foreach($navs as $k=>$v)
-                @if(!empty($v['_child']))
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">{{$v['name']}}</a>
-                        <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                            @foreach($v['_child'] as $k1=>$v1)
-                                <dd><a href="{{url($v1['url'])}}">{{$v1['name']}}</a></dd>
-                            @endforeach
-                        </dl>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">欢迎商城后台管理.</span>
                     </li>
-                @else
-                    <li class="layui-nav-item home"><a href="{{url($v['url'])}}">{{$v['name']}}</a></li>
-                @endif
 
-            @endforeach
-        </ul>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="{{asset('admin/img/a7.jpg')}}">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="{{asset('admin/img/a4.jpg')}}">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="{{asset('admin/img/profile.jpg')}}">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="{{url('/')}}"><i class="fa fa-desktop"></i> 前台</a>
+                    </li>
+
+                    {{--<li>
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            <i class="fa fa-sign-out"></i>
+                            退出
+                        </a>
+                    </li>--}}
+                </ul>
+
+            </nav>
+        </div>
+
+
+        @yield('content')
+
+
+        <div class="footer fixed" >
+            {{--<div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>--}}
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2017
+            </div>
+        </div>
+
     </div>
 </div>
-<div class="left_nav_mask"></div>
-<div class="left_nav_btn"><i class="layui-icon">&#xe602;</i></div>
-<!-- 左边导航 结束 -->
 
-@yield('content')
 
-<!-- 底部 开始 -->
-<ul class="layui-fixbar">
-    <li class="layui-icon layui-fixbar-top" id="to_top">&#xe604;</li>
-</ul>
-<div class="layui-footer footer">
-    <div class="main index_main">
-        <p><a href="javascript:;">xxxxx</a> © xxxxx</p>
-        <p class="beian">
-            <a class="gongan" target="_blank" href="">
-{{--                <img src="{{asset('home/images/gonganbeian.png')}}" alt="xxxxxxxxxxxxx">--}}
-                xxxxxxxxxxxxxxxxx
-            </a>
-            <a class="icp" target="_blank" href="http://www.miitbeian.gov.cn">xxxxxxxxxxxxxxxx</a>
-        </p>
+<!-- Large modal -->
+<div class="modal bs-example-modal-lg  animated bounceInDown" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="progress m-b-none">
+                <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only">100% Complete</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<script src="{{asset('admin/js/jquery-3.1.1.min.js')}}"></script>
-<!-- 底部 结束 -->
-<script type="text/javascript">
-    layui.use(['form','element'], function(){
-        var layer = layui.layer,
-            form = layui.form(),
-            element = layui.element(),
-            $ = layui.jquery;
 
-        //左边导航点击显示
-        $('.left_nav_btn').click(function(){
-            $('.left_nav_mask').show();
-            $('.left_nav').addClass('left_nav_show');
-        });
-        //左边导航点击消失
-        $('.left_nav_mask').click(function(){
-            $('.left_nav').removeClass('left_nav_show');
-            $('.left_nav_mask').hide();
-        });
+<!-- md-modal -->
+<div id="md-modal" class="modal bs-example-modal-md  animated bounceInDown" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="progress m-b-none">
+                <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only">100% Complete</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        //搜索框特效
-        $('.header .head_search .search_input').focus(function(){
-            $('.header .head_search').addClass('focus');
-            $(this).attr('placeholder','输入关键词搜索');
-        });
-        $(document).click(function(){
-            $('.header .head_search').removeClass('focus');
-            $('.header .head_search .search_input').attr('placeholder','搜索');
-        });
-        $('.header .head_search').click(function(e){
-            $(this).addClass('focus');
-            e.stopPropagation();
-        });
-        /*$('.header .head_search .close').click(function(){
-         $('.header .head_search').removeClass('focus');
-         $('.header .head_search .search_input').attr('placeholder','搜索');
-         });*/
+<!--sm-modal -->
+<div class="modal bs-example-modal-sm  animated bounceInDown"  role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="progress m-b-none">
+                <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only">100% Complete</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        //回到顶部
-        $("#to_top").click(function() {
-            $("html,body").animate({scrollTop:0}, 200);
-        });
-        $(document).scroll(function(){
-            var	scroll_top = $(document).scrollTop();
-            if(scroll_top > 500){
-                $("#to_top").show();
-            }else{
-                $("#to_top").hide();
-            }
-        });
-        //底部版权始终在底部
-        /*var win_height = $(window).height();
-         var body_height = $('body').height();
-         var footer_height = $('.footer').height();
-         if(body_height - win_height < 0){
-         $('.footer').addClass('footer_fixed');
-         } */
+
+
+<!-- Custom and plugin javascript -->
+<script src="{{asset('admin/js/inspinia.js')}}"></script>
+<script src="{{asset('admin/js/plugins/pace/pace.min.js')}}"></script>
+<script src="{{asset('admin/js/plugins/iCheck/icheck.min.js')}}"></script>
+<!-- webuploader -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/webuploader/webuploader.min.js')}}"></script>
+
+<!-- ztree -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/zTree/js/jquery.ztree.all.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('admin/js/plugins/zTree/js/jquery.ztree.exhide.min.js')}}"></script>
+
+<!-- icheck -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/iCheck/icheck.js') }}"></script>
+<script type="text/javascript" src="{{asset('admin/js/plugins/iCheck/js/custom.min.js')}}"></script>
+<!-- select2 -->
+<script type="text/javascript" src="{{ asset('admin/js/plugins/select2/js/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('admin/js/plugins/select2/js/i18n/zh-CN.js') }}"></script>
+
+<!-- bootstrap-datepicker -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js')}}"></script>
+
+<!-- bootstrap-daterangepicker -->
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-daterangepicker/moment.min.js')}}" ></script>
+<script type="text/javascript" src="{{asset('admin/js/plugins/bootstrap-daterangepicker/daterangepicker.js')}}" ></script>
+
+{{-- jeDate --}}
+<script type="text/javascript" src="{{asset('admin/js/plugins/jeDate/src/jedate.js')}}"></script>
+
+{{-- loading --}}
+<script src="{{asset('admin/js/plugins/loading/js/loading.js')}}"></script>
+<script src="{{asset('admin/js/style.js')}}" ></script>
+
+<script>
+    $("#refreshTable").on("click",function () {
+        window.location.reload();
     });
 </script>
+
+
+
+<script type="text/javascript">
+    // Config box
+    if (localStorageSupport){
+        localStorage.setItem("fixedfooter",'on');
+        localStorage.setItem("fixedsidebar",'on');
+        localStorage.setItem("fixednavbar",'off');
+        localStorage.setItem("fixednavbar2",'off');
+    }
+
+</script>
+
+<script type="text/javascript" >
+    function to_login() {
+        $(".bs-example-modal-md .modal-content").html();
+        $.ajax({
+            url: "{{ url('to_login') }}",
+            type: 'GET',
+            dataType: 'HTML',
+            cache:false,
+            beforeSend: function () {
+            },
+            success: function (data, textStatus, xhr) {
+                $(".bs-example-modal-md .modal-content").html(data);
+            }
+        });
+    }
+    function to_register() {
+
+    }
+</script>
 </body>
+
 </html>

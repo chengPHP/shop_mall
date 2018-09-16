@@ -22,7 +22,7 @@
     <div>
         <div>
 
-            <h1 class="logo-name" style="font-size: 130px;padding-bottom: 80px;">Blog</h1>
+            <h1 class="logo-name" style="font-size: 130px;padding-bottom: 80px;">Shop</h1>
 
         </div>
         {{--<h3>Register to Blog</h3>--}}

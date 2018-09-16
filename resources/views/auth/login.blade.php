@@ -21,7 +21,7 @@
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
         <div>
-            <h1 class="logo-name" style="font-size: 130px;padding-bottom: 80px;" >Blog</h1>
+            <h1 class="logo-name" style="font-size: 130px;padding-bottom: 80px;" >Shop</h1>
         </div>
 
         <form class="form-horizontal m-t" role="form" method="POST" action="{{ route('login') }}">

@@ -52,3 +52,26 @@ Route::group(['prefix' => 'file', 'namespace' => 'Admin', 'middleware' => 'auth'
     Route::post('file_upload', 'FileController@fileUpload')->name('file.upload');
     Route::post('video_upload', 'FileController@videoUpload')->name('video.upload');
 });
+
+//前台
+Route::group(['namespace'=>'Home'], function () {
+    //商品列表页
+    Route::get('/','IndexController@index')->name('/');
+
+    //商品详情页
+//    Route::resource('good','GoodController');
+    Route::get('good/{id}','GoodController@show');
+    Route::post('add_good_to_car','GoodController@add_good_to_car');
+
+
+    //会员注册
+    Route::get('to_register','RegisterController@to_register');
+    Route::post('do_register','RegisterController@do_register');
+
+    //会员登录
+    Route::get('to_login','LoginController@to_login');
+    Route::post('do_login','LoginController@do_login');
+
+
+
+});

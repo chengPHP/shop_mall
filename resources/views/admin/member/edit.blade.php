@@ -50,9 +50,9 @@
             </div>
             <div class="col-md-4" >
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">邮箱<span style="color:red;">*</span></label>
+                    <label for="birthday" class="col-sm-4 control-label">出生日期</label>
                     <div class="col-sm-8">
-                        <input id="email" type="email" name="email" value="{{$info->email}}" placeholder="邮箱地址" class="form-control">
+                        <input id="birthday" type="text" name="birthday" placeholder="出生日期" value="{{$info->birthday}}" data-error-container="#error-block" class="form-control datepicker" data-date-date = "0d">
                     </div>
                 </div>
             </div>
@@ -87,11 +87,12 @@
             </div>
 
 
-            <div class="col-md-4" >
+
+            {{--<div class="col-md-4" >
                 <div class="form-group">
-                    <label for="birthday" class="col-sm-4 control-label">出生日期</label>
+                    <label for="email" class="col-sm-4 control-label">邮箱<span style="color:red;">*</span></label>
                     <div class="col-sm-8">
-                        <input id="birthday" type="text" name="birthday" placeholder="出生日期" value="{{$info->birthday}}" data-error-container="#error-block" class="form-control datepicker" data-date-date = "0d">
+                        <input id="email" type="email" name="email" value="{{$info->email}}" placeholder="邮箱地址" class="form-control">
                     </div>
                 </div>
             </div>
@@ -111,7 +112,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="home_phone" class="col-sm-4 control-label">家庭电话</label>
@@ -119,7 +119,8 @@
                         <input id="home_phone" type="text" name="home_phone" value="{{$info->home_phone}}" placeholder="家庭电话" class="form-control">
                     </div>
                 </div>
-            </div>
+            </div>--}}
+
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="Comment" class="col-sm-4 control-label">照片</label>

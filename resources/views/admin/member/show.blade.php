@@ -29,15 +29,15 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4" >
                 <div class="form-group">
-                    <label for="email" class="col-sm-4 control-label">邮箱<span style="color:red;">*</span></label>
+                    <label for="office_phone" class="col-sm-4 control-label">会员等级</label>
                     <div class="col-sm-8">
-                        <input id="email" type="email" name="email" value="{{$info->email}}" disabled class="form-control">
+                        <input id="rank" type="text" name="rank" value="{{$info->rank->name}}" disabled class="form-control">
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="password_question" class="col-sm-4 control-label">密码提问</label>
@@ -75,20 +75,20 @@
                     </div>
                 </div>
             </div>
+
+            {{--<div class="col-md-4" >
+                <div class="form-group">
+                    <label for="email" class="col-sm-4 control-label">邮箱<span style="color:red;">*</span></label>
+                    <div class="col-sm-8">
+                        <input id="email" type="email" name="email" value="{{$info->email}}" disabled class="form-control">
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4" >
                 <div class="form-group">
                     <label for="qq" class="col-sm-4 control-label">qq账号</label>
                     <div class="col-sm-8">
                         <input id="qq" type="text" name="qq" value="{{$info->qq}}" disabled class="form-control">
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4" >
-                <div class="form-group">
-                    <label for="office_phone" class="col-sm-4 control-label">会员等级</label>
-                    <div class="col-sm-8">
-                        <input id="rank" type="text" name="rank" value="{{$info->rank->name}}" disabled class="form-control">
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                         <input id="home_phone" type="text" name="home_phone" value="{{$info->home_phone}}" disabled class="form-control">
                     </div>
                 </div>
-            </div>
+            </div>--}}
 
             <div class="col-md-4" >
                 <div class="form-group">
@@ -143,7 +143,7 @@
                 <tr>
                     <th><input class="icheck_input_all" type="checkbox"></th>
                     <th>id</th>
-                    <th>姓名</th>
+                    <th>收件人</th>
                     <th>电话</th>
                     <th>所在位置</th>
                     <th>详情地址</th>
