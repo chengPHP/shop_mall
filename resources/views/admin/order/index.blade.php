@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.admin')
 
 
 @section('content')
@@ -32,7 +32,12 @@
                                 <tr>
                                     <td><input class="icheck_input good_input" type="checkbox" value="{{$v['id']}}"></td>
                                     <td>{{$v['id']}}</td>
-                                    <td>{{$v['no']}}</td>
+                                    <td>
+                                        {{$v['no']}}
+                                        @if($v['closed'])
+                                            <span class="label label-warning">订单已关闭</span>
+                                        @endif
+                                    </td>
                                     <td>{{$v['total_amount']}} 元</td>
                                     <td>{{$v['payment_method']}}</td>
                                     <td>
@@ -47,7 +52,9 @@
                                     <td>{{$v['ship_data']}}</td>
                                     <td>
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
-                                        {{--<a class="btn btn-xs btn-info" title="修改信息" href="{{url('admin/good/'.$v['id'].'/edit')}}"><i class="fa fa-wrench"></i> 修改</a>--}}
+                                        @if($v['ship_status']==0 && !$v['closed'])
+                                            <a class="btn btn-xs btn-success" title="修改信息" onclick="seedOrder(this,'{{$v['id']}}')" ><i class="fa fa-wrench"></i> 发货</a>
+                                        @endif
                                         {{--<span class="btn btn-xs btn-danger" title="删除商品" onclick="deleteGood(this,'{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>--}}
                                     </td>
                                 </tr>
@@ -139,7 +146,7 @@
         function showOrder(id) {
             $(".bs-example-modal-lg .modal-content").html();
             $.ajax({
-                url: "{{ url('member/order') }}/"+id,
+                url: "{{ url('admin/order') }}/"+id,
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -149,6 +156,57 @@
                     $(".bs-example-modal-lg .modal-content").html(data);
                 }
             });
+        }
+
+        //发货
+        function seedOrder(obj,id) {
+            swal({
+                    title: '确认发货？',
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    cancelButtonText: "取消",
+                    confirmButtonText: "确认",
+                    closeOnConfirm: false
+                },
+                function () {
+                    $.ajax({
+                        type: "post",
+                        url: "{{url('admin/order')}}/"+id,
+//                data: $('.form-horizontal').serialize(),
+                        data: {
+                            '_token': "{{csrf_token()}}",
+                            '_method': 'PUT'
+                        },
+                        dataType:"json",
+                        beforeSend:function () {
+                            // 禁用按钮防止重复提交
+                            $(obj).attr({ disabled: "disabled" });
+                            blog.loading('正在提交，请稍等...');
+                        },
+                        success: function (data) {
+                            if(data.code==1){
+                                swal({
+                                    title: "",
+                                    text: data.message,
+                                    type: "success",
+                                    timer: 1000,
+                                },function () {
+                                    window.location.reload();
+                                });
+                            }else{
+                                swal("", data.message, "error");
+                            }
+                        },
+                        complete:function () {
+                            $(obj).removeAttr("disabled");
+                            removeLoading('loading');
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            blog.errorPrompt(jqXHR, textStatus, errorThrown);
+                        }
+                    });
+                });
         }
 
         $("#simple-search").on('click',function () {

@@ -44,7 +44,9 @@
     </ul>
 </li>
 
-
+<li class="{{ active_class(if_uri_pattern('admin/order*')) }}">
+    <a href="{{url('admin/order')}}"><i class="fa fa-address-card-o"></i> <span class="nav-label">后台订单管理</span></a>
+</li>
 
 {{--<li class="{{ active_class(if_uri_pattern('admin/article*')) }}">
     <a href="{{url('admin/article')}}"><i class="fa fa-folder-open"></i> <span class="nav-label">文章管理</span> <span

@@ -42,6 +42,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     //城市管理
     Route::resource('region','RegionController');
 
+    //订单管理
+    Route::resource('order','OrderController');
 
 });
 
