@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->string('no')->unique()->nullable()->comment('订单流水号');
             $table->integer('member_id')->nullable()->comment('会员用户id');
-            $table->text('address')->nullable()->comment('JSON格式的收货地址');
+            $table->integer('address_id')->nullable()->comment('收货地址id');
             $table->decimal('total_amount')->nullable()->comment('订单总金额');
             $table->text('remark')->nullable()->comment('订单备注');
             $table->dateTime('paid_at')->nullable()->comment('支付时间');

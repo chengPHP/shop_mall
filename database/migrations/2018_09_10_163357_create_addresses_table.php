@@ -17,7 +17,7 @@ class CreateAddressesTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('address_name')->nullable()->comment("名称");
-            $table->string('user_id')->nullable()->comment('用户表id');
+            $table->string('member_id')->nullable()->comment('会员表id');
             $table->string('consignee')->nullable()->comment("收货人姓名");
             $table->string('email')->nullable()->comment('收货人的email');
             $table->string('province')->nullable()->comment("省");
@@ -30,6 +30,7 @@ class CreateAddressesTable extends Migration
             $table->string('phone')->nullable()->comment("收货人的手机号");
             $table->string('sign_building')->nullable()->comment("收货地址的标志性建筑名");
             $table->string('best_time')->nullable()->comment("收货人的最佳收货时间");
+            $table->tinyInteger('status')->default(1)->comment('状态 -1|删除 0|禁用 1|启用');
             $table->timestamps();
             $table->index(['region_id']);
         });

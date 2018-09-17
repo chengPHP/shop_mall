@@ -112,17 +112,11 @@
                             <li><a href="contacts.html">Contacts</a></li>
                             <li><a href="mailbox.html">Mailbox</a></li>
                             <li class="divider"></li>
-                            {{--<li>
-                                <a href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                            <li>
+                                <a href="{{ url('out_login') }}">
                                     退出
                                 </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>--}}
+                            </li>
                         </ul>
                     </div>
                     <div class="logo-element">

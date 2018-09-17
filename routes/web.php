@@ -63,6 +63,16 @@ Route::group(['namespace'=>'Home'], function () {
     Route::get('good/{id}','GoodController@show');
     Route::post('add_good_to_car','GoodController@add_good_to_car');
 
+    //订单中心
+    Route::resource('member/order','OrderController');
+    //我的购物车
+    Route::resource('member/cart','CartController');
+//    Route::get('member/my_shop_cart','MemberController@my_shop_cart');
+    //删除购物车指定商品
+//    Route::post('member/delete_cart_shop','MemberController@delete_cart_shop');
+    //收件地址管理
+    Route::resource('member/address','AddressController');
+
 
     //会员注册
     Route::get('to_register','RegisterController@to_register');
@@ -71,7 +81,8 @@ Route::group(['namespace'=>'Home'], function () {
     //会员登录
     Route::get('to_login','LoginController@to_login');
     Route::post('do_login','LoginController@do_login');
-
+    //退出登录
+    Route::get('out_login','LoginController@out_login');
 
 
 });

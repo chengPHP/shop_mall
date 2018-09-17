@@ -13,4 +13,8 @@ class Attr extends Model
     public function files(){
         return $this->belongsToMany('App\Models\File');
     }
+
+    public function good(){
+        return $this->belongsToMany('App\Models\Good');
+    }
 }

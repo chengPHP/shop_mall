@@ -35,4 +35,10 @@ class LoginController extends Controller
         }
         return response()->json($message);
     }
+
+    //退出登录
+    public function out_login(){
+        Session::remove('member_id');
+        return redirect('/');
+    }
 }

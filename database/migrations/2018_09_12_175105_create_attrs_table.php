@@ -16,6 +16,7 @@ class CreateAttrsTable extends Migration
     {
         Schema::create('attrs', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('good_id')->nullable()->comment('所属商品id');
             $table->string('model_number')->nullable()->comment('版本、型号');
             $table->string('color_id')->nullable()->comment('所属颜色id');
             $table->string('price')->nullable()->comment('商品原价格 单位:元');

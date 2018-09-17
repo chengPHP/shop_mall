@@ -16,18 +16,18 @@
 
 @if(\Illuminate\Support\Facades\Session::get('member_id'))
 
-    <li class="">
+    <li class="{{ active_class(if_uri_pattern('member*')) }}">
         <a href="{{route('/')}}"><i class="fa fa-folder-open"></i> <span class="nav-label">个人中心</span> <span
                     class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
-            <li class="">
-                <a href="{{url('admin/article')}}"><i class="fa fa-envelope"></i> <span class="nav-label">订单中心</span></a>
+            <li class="{{ active_class(if_uri_pattern('member/order*')) }}">
+                <a href="{{url('member/order')}}"><i class="fa fa-envelope"></i> <span class="nav-label">订单中心</span></a>
             </li>
-            <li class="">
-                <a href="{{url('admin/article')}}"><i class="fa fa-envelope"></i> <span class="nav-label">我的购物车</span></a>
+            <li class="{{ active_class(if_uri_pattern('member/cart*')) }}">
+                <a href="{{url('member/cart')}}"><i class="fa fa-envelope"></i> <span class="nav-label">我的购物车</span></a>
             </li>
-            <li class="">
-                <a href="{{url('admin/article/create')}}"><i class="fa fa-pencil"></i> <span class="nav-label">收货地址</span></a>
+            <li class="{{ active_class(if_uri_pattern('member/address*')) }}">
+                <a href="{{url('member/address')}}"><i class="fa fa-pencil"></i> <span class="nav-label">收货地址</span></a>
             </li>
             <li class="">
                 <a href="{{url('admin/article/create')}}"><i class="fa fa-pencil"></i> <span class="nav-label">个人信息</span></a>
