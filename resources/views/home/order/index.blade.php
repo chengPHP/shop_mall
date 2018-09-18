@@ -32,7 +32,14 @@
                                 <tr>
                                     <td><input class="icheck_input good_input" type="checkbox" value="{{$v['id']}}"></td>
                                     <td>{{$v['id']}}</td>
-                                    <td>{{$v['no']}}</td>
+                                    <td>
+                                        <a href="javascript:;" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg">
+                                            {{$v['no']}}
+                                            @if($v['closed'])
+                                                <span class="label label-warning">订单已关闭</span>
+                                            @endif
+                                        </a>
+                                    </td>
                                     <td>{{$v['total_amount']}} 元</td>
                                     <td>{{$v['payment_method']}}</td>
                                     <td>

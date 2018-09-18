@@ -156,7 +156,8 @@
                             type: "success",
                             timer: 1000,
                         },function () {
-                            window.location.reload();
+//                            window.location.reload();
+                            window.location.href = "{{url('member/order/to_pay')}}/"+data.order_id;
                         });
                     }else{
                         swal("", data.message, "error");

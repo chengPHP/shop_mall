@@ -66,6 +66,7 @@ Route::group(['namespace'=>'Home'], function () {
     Route::post('add_good_to_car','GoodController@add_good_to_car');
 
     //订单中心
+    Route::get('member/order/to_pay/{id}','OrderController@to_pay');
     Route::resource('member/order','OrderController');
     //我的购物车
     Route::resource('member/cart','CartController');

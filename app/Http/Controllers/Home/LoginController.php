@@ -39,6 +39,6 @@ class LoginController extends Controller
     //退出登录
     public function out_login(){
         Session::remove('member_id');
-        return redirect('/');
+        redirect('/')->send();
     }
 }

@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
-    public function __construct()
+    public function init()
     {
         if(!Session::get('member_id')){
-            return redirect('/');
+            redirect('/')->send();
         }
     }
 
@@ -26,6 +26,7 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $this->init();
         $member_id = Session::get('member_id');
         $order_list = Order::where('member_id',$member_id)->with('member','address')->get();
         foreach ($order_list as $k=>$v){
@@ -54,6 +55,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $this->init();
         $attr_id = explode(',',$request->attr_id);
 //        dd($attr_id);
         //商品总金额
@@ -74,19 +76,18 @@ class OrderController extends Controller
             'total_amount' => $total_amount,
             'remark' => $request->remark,
             'reviewed' => 0,
-            'paid_at' => date("y-m-d H:i:s"),
-            'payment_method' => "支付宝支付",
-            'payment_no' => date('YmdHis').rand(100,999),
+//            'paid_at' => date("y-m-d H:i:s"),
+//            'payment_method' => "支付宝支付",
+//            'payment_no' => date('YmdHis').rand(100,999),
             'closed' => 0,
-            'ship_status' => '未发货',
-            'ship_data' => '未发货',
+//            'ship_status' => '未发货',
+//            'ship_data' => '未发货',
             'created_at' => date('Y-m-d H:i:s')
         ];
         $order_id = Order::insertGetId($arr);
 
         foreach ($attr_id as $k=>$v){
             $attr_infos = Attr::where('id',$v)->first();
-//            dd($attr_infos->stock);
             $cart_item = CartItem::where('attr_id',$v)->first();
             $item_arr = [
                 'order_id' => $order_id,
@@ -103,7 +104,8 @@ class OrderController extends Controller
         if($info){
             $message = [
                 'code' => 1,
-                'message' => '支付成功，商家正在尽快配货'
+                'order_id' => $order_id,
+                'message' => '订单生成成功，请尽快支付'
             ];
         }else{
             $message = [
@@ -122,6 +124,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+        $this->init();
         $order_id = $id;
         $order_info = Order::where('id',$order_id)->with('member','address')->first();
         $order_item_list = OrderItem::where('order_id',$order_info->id)->with('good','attr','attr.color')->get();
@@ -160,5 +163,22 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 新增订单，跳转到待支付页面
+     */
+    public function to_pay($order_id)
+    {
+        $this->init();
+//        http://shop_mall.me/member/order/to_pay/5
+        dd($order_id);
+        //订单详情
+        $order_info = Order::where('id',$order_id)->with('member','address')->first();
+        //
+        $order_attr_list = OrderItem::where('order_id',$order_id)->with('good','attr')->get();
+
+        return view('home.order.new_order',compact('order_info','order_attr_list'));
+
     }
 }

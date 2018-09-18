@@ -92,7 +92,7 @@ class OrderController extends Controller
         }else{
             $message = [
                 'code' => 0,
-                'message' => '已确认发货，无需重复发货'
+                'message' => '已确认发货，无需重复操作'
             ];
         }
         return response()->json($message);
@@ -106,6 +106,26 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $order_info = Order::where('id',$id)->first();
+        if(!$order_info['closed']){
+            $info = Order::where('id',$id)->update(['closed'=>1]);
+            if($info){
+                $message = [
+                    'code' => 1,
+                    'message' => '订单关闭成功'
+                ];
+            }else{
+                $message = [
+                    'code' => 0,
+                    'message' => '操作异常，请稍后重试'
+                ];
+            }
+        }else{
+            $message = [
+                'code' => 0,
+                'message' => '订单已关闭，无需重复操作'
+            ];
+        }
+        return response()->json($message);
     }
 }
