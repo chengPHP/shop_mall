@@ -46,17 +46,46 @@
                             </tbody>
                         </table>
 
+                        <form id="signupForm" method="post" class="form-horizontal">
 
-                        <p>收件地址详情： {{$order_info->address['consignee']}} {{$order_info->address['phone']}} {{$order_info->address['address']}}</p>
-
-                        <div class="form-group">
-                            <label for="password_answer" class="col-md-1 control-label">备注</label>
-                            <div class="col-md-11">
-                                <textarea class="remark" disabled cols="60" rows="5" style="resize:none;padding: 5px;">{{$order_info->remark}}</textarea>
+                            <div class="form-group">
+                                <label class="col-md-1 control-label">订单总价</label>
+                                <div class="col-md-11">
+                                    <input type="text" class="form-control" value="{{$order_info->total_amount}} 元" disabled>
+                                </div>
                             </div>
-                        </div>
 
-                        <button type="button" class="btn btn-info" onclick="pay(this)">确认支付</button>
+                            <div class="form-group">
+                                <label class="col-md-1 control-label">收件地址</label>
+                                <div class="col-md-11">
+                                    <input type="text" class="form-control" value="{{$order_info->address['consignee']}} {{$order_info->address['phone']}} {{$order_info->address['address']}}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-1 control-label">订单编号</label>
+                                <div class="col-md-11">
+                                    <input type="text" class="form-control" value="{{$order_info->no}}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-1 control-label">支付状态</label>
+                                <div class="col-md-11">
+                                    <input type="text" class="form-control" value="{{!$order_info->ship_status?'未支付':'已支付'}}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-1 control-label">备注</label>
+                                <div class="col-md-11">
+                                    <textarea class="remark" disabled cols="60" rows="5" style="resize:none;padding: 5px;">{{$order_info->remark}}</textarea>
+                                </div>
+                            </div>
+                        </form>
+
+                        {{--<button type="button" class="btn btn-info" onclick="pay(this)">确认支付</button>--}}
+                        <a class="btn btn-info" href="{{ route('payment.alipay', ['order' => $order_info->id]) }}">支付宝支付</a>
                     </div>
                 </div>
             </div>
