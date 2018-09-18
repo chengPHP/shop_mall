@@ -172,10 +172,9 @@ class OrderController extends Controller
     {
         $this->init();
 //        http://shop_mall.me/member/order/to_pay/5
-        dd($order_id);
         //订单详情
         $order_info = Order::where('id',$order_id)->with('member','address')->first();
-        //
+
         $order_attr_list = OrderItem::where('order_id',$order_id)->with('good','attr')->get();
 
         return view('home.order.new_order',compact('order_info','order_attr_list'));

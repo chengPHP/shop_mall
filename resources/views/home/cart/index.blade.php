@@ -140,7 +140,7 @@
                     '_token': "{{csrf_token()}}",
                     'attr_id': attr_ids,
                     'address_id' : $("input[name='address_id']").val(),
-                    'remark' : $(".remark").html()
+                    'remark' : $(".remark").val()
                 },
                 dataType:"json",
                 beforeSend:function () {
