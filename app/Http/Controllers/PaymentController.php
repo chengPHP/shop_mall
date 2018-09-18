@@ -55,7 +55,8 @@ class PaymentController extends Controller
             'payment_no'     => $data->trade_no, // 支付宝订单号
         ]);
 
-        redirect('/')->send();
+//        redirect('/')->send();
+        redirect('member/order')->send();
     }
 
     // 服务器端回调

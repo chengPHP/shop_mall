@@ -23,7 +23,6 @@
                                 <th>订单总金额</th>
                                 <th>支付方式</th>
                                 <th>物流状态</th>
-                                <th>物流数据</th>
                                 <th>设置</th>
                             </tr>
                             </thead>
@@ -41,7 +40,7 @@
                                         </a>
                                     </td>
                                     <td>{{$v['total_amount']}} 元</td>
-                                    <td>{{$v['payment_method']}}</td>
+                                    <td>{{$v['payment_method']?$v['payment_method']:'暂无支付'}}</td>
                                     <td>
                                         @if($v['ship_status']==0)
                                             <span class="label label-primary">未发货</span>
@@ -51,11 +50,11 @@
                                             <span class="label label-success">已收货</span>
                                         @endif
                                     </td>
-                                    <td>{{$v['ship_data']}}</td>
                                     <td>
+                                        @if(!$v['payment_no'])
+                                            <a class="btn btn-xs btn-success" title="支付" href="{{ route('payment.alipay', ['order' => $v['id']]) }}"><i class="fa fa-cny"></i> 支付</a>
+                                        @endif
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
-                                        {{--<a class="btn btn-xs btn-info" title="修改信息" href="{{url('admin/good/'.$v['id'].'/edit')}}"><i class="fa fa-wrench"></i> 修改</a>--}}
-                                        {{--<span class="btn btn-xs btn-danger" title="删除商品" onclick="deleteGood(this,'{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>--}}
                                     </td>
                                 </tr>
                             @endforeach

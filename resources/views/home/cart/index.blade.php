@@ -120,7 +120,11 @@
         });
 
         function add(obj) {
+
             var checkStatus = $("tbody input[type='checkbox']:checked");
+
+            var address_id = $("input[name='address_id']:checked").val();
+
             if(checkStatus.length >= 1){
                 var attr_ids = [];
                 $.each(checkStatus,function(i,v){
@@ -132,6 +136,11 @@
                 return;
             }
 
+            if(!address_id){
+                swal("请选择收货地址！", "", "warning");
+                return;
+            }
+
             $.ajax({
                 type: "post",
                 url: "{{url('member/order')}}",
@@ -139,7 +148,7 @@
                 data: {
                     '_token': "{{csrf_token()}}",
                     'attr_id': attr_ids,
-                    'address_id' : $("input[name='address_id']").val(),
+                    'address_id' : address_id,
                     'remark' : $(".remark").val()
                 },
                 dataType:"json",

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Logistic;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $order_list = Order::with('member','address')->paginate(5);
+        $order_list = Order::with('member','address')->orderBy('id','desc')->paginate(5);
         return view('admin.order.index',compact('order_list'));
     }
 
@@ -52,7 +53,9 @@ class OrderController extends Controller
         $order_id = $id;
         $order_info = Order::where('id',$order_id)->with('member','address')->first();
         $order_item_list = OrderItem::where('order_id',$order_info->id)->with('good','attr','attr.color')->get();
-        return view('admin.order.show',compact('order_info','order_item_list'));
+        //物流详情
+        $logistic_list = Logistic::where('order_id',$order_id)->orderBy('created_at','desc')->get();
+        return view('admin.order.show',compact('order_info','order_item_list','logistic_list'));
     }
 
     /**
@@ -125,6 +128,37 @@ class OrderController extends Controller
                 'code' => 0,
                 'message' => '订单已关闭，无需重复操作'
             ];
+        }
+        return response()->json($message);
+    }
+
+    /**
+     * 确认发货
+     */
+    public function seed_order(Request $request)
+    {
+        $order = Order::find($request->order_id);
+        if($order->closed || $order->ship_status>0){
+            $message = [
+                'code' => 0,
+                'message' => '已操作，无需重复操作'
+            ];
+        }else{
+            $arr = [
+                'ship_status' => 1
+            ];
+            $info = Order::where('id',$request->order_id)->update($arr);
+            if($info){
+                $message = [
+                    'code' => 1,
+                    'message' => '订单已发货'
+                ];
+            }else{
+                $message = [
+                    'code' => 0,
+                    'message' => '操作异常，请稍后重试'
+                ];
+            }
         }
         return response()->json($message);
     }

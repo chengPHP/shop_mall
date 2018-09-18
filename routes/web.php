@@ -43,6 +43,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     Route::resource('region','RegionController');
 
     //订单管理
+    Route::post('order/seed_order','OrderController@seed_order');
     Route::resource('order','OrderController');
 
 });

@@ -19,11 +19,11 @@
                             <tr>
                                 <th><input class="icheck_input_all" type="checkbox"></th>
                                 <th>id</th>
+                                <th>用户名</th>
                                 <th>订单流水号</th>
                                 <th>订单总金额</th>
                                 <th>支付方式</th>
                                 <th>物流状态</th>
-                                <th>物流数据</th>
                                 <th>设置</th>
                             </tr>
                             </thead>
@@ -32,6 +32,7 @@
                                 <tr>
                                     <td><input class="icheck_input good_input" type="checkbox" value="{{$v['id']}}"></td>
                                     <td>{{$v['id']}}</td>
+                                    <td>{{$v->member['name']}}</td>
                                     <td>
                                         <a href="javascript:;" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg">
                                         {{$v['no']}}
@@ -41,7 +42,7 @@
                                         </a>
                                     </td>
                                     <td>{{$v['total_amount']}} 元</td>
-                                    <td>{{$v['payment_method']}}</td>
+                                    <td>{{$v['payment_method']?$v['payment_method']:'暂未支付'}}</td>
                                     <td>
                                         @if($v['ship_status']==0)
                                             <span class="label label-primary">未发货</span>
@@ -51,7 +52,6 @@
                                             <span class="label label-success">已收货</span>
                                         @endif
                                     </td>
-                                    <td>{{$v['ship_data']}}</td>
                                     <td>
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
                                         @if($v['ship_status']==0 && !$v['closed'])
@@ -175,11 +175,10 @@
                 function () {
                     $.ajax({
                         type: "post",
-                        url: "{{url('admin/order')}}/"+id,
-//                data: $('.form-horizontal').serialize(),
+                        url: "{{url('admin/order/seed_order')}}",
                         data: {
                             '_token': "{{csrf_token()}}",
-                            '_method': 'PUT'
+                            'order_id' : id
                         },
                         dataType:"json",
                         beforeSend:function () {

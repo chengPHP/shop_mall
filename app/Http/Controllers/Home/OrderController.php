@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Models\Attr;
 use App\Models\CartItem;
+use App\Models\Logistic;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -28,12 +29,7 @@ class OrderController extends Controller
     {
         $this->init();
         $member_id = Session::get('member_id');
-        $order_list = Order::where('member_id',$member_id)->with('member','address')->get();
-        foreach ($order_list as $k=>$v){
-//            dump($v['id']);
-//            $order_list[$k]['item_list'] = OrderItem::where('order_id',$v['id'])->with('good','attr')->get();
-        }
-//        dd($order_list);
+        $order_list = Order::where('member_id',$member_id)->with('member','address')->orderBy('id','desc')->get();
         return view('home.order.index',compact('order_list'));
     }
 
@@ -128,7 +124,9 @@ class OrderController extends Controller
         $order_id = $id;
         $order_info = Order::where('id',$order_id)->with('member','address')->first();
         $order_item_list = OrderItem::where('order_id',$order_info->id)->with('good','attr','attr.color')->get();
-        return view('home.order.show',compact('order_info','order_item_list'));
+        //物流详情
+        $logistic_list = Logistic::where('order_id',$order_id)->orderBy('created_at','desc')->get();
+        return view('home.order.show',compact('order_info','order_item_list','logistic_list'));
     }
 
     /**
