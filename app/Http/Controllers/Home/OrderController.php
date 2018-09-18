@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Models\Attr;
 use App\Models\CartItem;
+use App\Models\Evaluate;
 use App\Models\Logistic;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -164,6 +165,9 @@ class OrderController extends Controller
     }
 
     /**
+     * @param $order_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * 新增订单，跳转到待支付页面
      */
     public function to_pay($order_id)
@@ -178,4 +182,93 @@ class OrderController extends Controller
         return view('home.order.new_order',compact('order_info','order_attr_list'));
 
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * 确认签收
+     */
+    public function delivers(Request $request)
+    {
+        $this->init();
+        //订单是否属于当前用户
+        $order_info = Order::find($request->order_id);
+        if($order_info->member_id == Session::get('member_id')){
+            $arr = [
+                'ship_status' => 2
+            ];
+            $info = Order::where('id',$request->order_id)->update($arr);
+            if($info){
+                $message = [
+                    'code' => 1,
+                    'message' => '操作成功'
+                ];
+            }else{
+                $message = [
+                    'code' => 0,
+                    'message' => '网络异常，请稍后重试'
+                ];
+            }
+        }else{
+            $message = [
+                'code' => 0,
+                'message' => '当前操作属于非法操作'
+            ];
+        }
+        return response()->json($message);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * 打开评价页面
+     */
+    public function to_evaluate($id)
+    {
+        $this->init();
+        //订单详情
+//        $order_info = Order::where('id',$id)->with('member','address')->first();
+//        $order_attr_list = OrderItem::where('order_id',$id)->with('good','attr')->get();
+//        return view('home.order.evaluate',compact('order_info','order_attr_list'));
+        return view('home.order.evaluate',compact('id'));
+    }
+
+    public function do_evaluate(Request $request)
+    {
+        $this->init();
+        if(Evaluate::where('order_id',$request->order_id)->first()){
+            $message = [
+                'code' => 0,
+                'message' => '已作出评价，无需重复评价'
+            ];
+        }else{
+            $evaluate = new Evaluate();
+            $arr = [
+                'order_id' => $request->order_id,
+                'score' => $request->score,
+                'contents' => $request->contents
+            ];
+            $evaluate_id = Evaluate::insertGetId($arr);
+            if($evaluate_id){
+                $map = [
+                    'reviewed'=>1,
+                    'evaluate_id' => $evaluate_id
+                ];
+                Order::where('id',$request->order_id)->update($map);
+                $message = [
+                    'code' => 1,
+                    'message' => '感谢您的评价！'
+                ];
+            }else{
+                $message = [
+                    'code' => 0,
+                    'message' => '网络异常，请稍后重试'
+                ];
+            }
+        }
+        return response()->json($message);
+    }
+
 }

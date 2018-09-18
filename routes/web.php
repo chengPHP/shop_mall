@@ -68,6 +68,10 @@ Route::group(['namespace'=>'Home'], function () {
 
     //订单中心
     Route::get('member/order/to_pay/{id}','OrderController@to_pay');
+    //确认签收
+    Route::post('member/order/delivers','OrderController@delivers');
+    Route::get('member/order/to_evaluate/{id}','OrderController@to_evaluate');
+    Route::post('member/order/do_evaluate','OrderController@do_evaluate');
     Route::resource('member/order','OrderController');
     //我的购物车
     Route::resource('member/cart','CartController');

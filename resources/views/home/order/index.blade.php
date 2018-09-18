@@ -47,14 +47,19 @@
                                         @elseif($v['ship_status']==1)
                                             <span class="label label-info">已发货</span>
                                         @else
-                                            <span class="label label-success">已收货</span>
+                                            <span class="label label-success">已签收</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if(!$v['payment_no'])
-                                            <a class="btn btn-xs btn-success" title="支付" href="{{ route('payment.alipay', ['order' => $v['id']]) }}"><i class="fa fa-cny"></i> 支付</a>
+                                            <a class="btn btn-xs btn-primary" title="支付" href="{{ route('payment.alipay', ['order' => $v['id']]) }}"><i class="fa fa-cny"></i> 支付</a>
                                         @endif
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
+                                        @if($v['ship_status']==1)
+                                            <span class="btn btn-xs btn-success" title="确认签收" onclick="deliversOrder(this,'{{$v['id']}}')">确认签收</span>
+                                        @elseif($v['ship_status']==2 && !$v['evaluate_id'])
+                                            <span class="btn btn-xs btn-info" title="评价" onclick="reviewed('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-wrench"></i> 评价</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -141,6 +146,55 @@
             });
         }
 
+        function deliversOrder(obj,id) {
+            swal({
+                    title: '确认签收？',
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    cancelButtonText: "取消",
+                    confirmButtonText: "确认",
+                    closeOnConfirm: false
+                },
+                function () {
+                    $.ajax({
+                        type: "post",
+                        url: "{{url('member/order/delivers')}}",
+                        data: {
+                            '_token': "{{csrf_token()}}",
+                            'order_id': id
+                        },
+                        dataType: "json",
+                        beforeSend: function () {
+                            // 禁用按钮防止重复提交
+                            $(obj).attr({disabled: "disabled"});
+                            blog.loading('正在提交，请稍等...');
+                        },
+                        success: function (data) {
+                            if (data.code == 1) {
+                                swal({
+                                    title: "",
+                                    text: data.message,
+                                    type: "success",
+                                    timer: 1000,
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                swal("", data.message, "error");
+                            }
+                        },
+                        complete: function () {
+                            $(obj).removeAttr("disabled");
+                            removeLoading('loading');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            blog.errorPrompt(jqXHR, textStatus, errorThrown);
+                        }
+                    });
+                });
+        }
+
 
         function showOrder(id) {
             $(".bs-example-modal-lg .modal-content").html();
@@ -153,6 +207,22 @@
                 },
                 success: function (data, textStatus, xhr) {
                     $(".bs-example-modal-lg .modal-content").html(data);
+                }
+            });
+        }
+
+        //订单评价
+        function reviewed(id) {
+            $(".bs-example-modal-md .modal-content").html();
+            $.ajax({
+                url: "{{ url('member/order/to_evaluate') }}/"+id,
+                type: 'GET',
+                dataType: 'HTML',
+                cache:false,
+                beforeSend: function () {
+                },
+                success: function (data, textStatus, xhr) {
+                    $(".bs-example-modal-md .modal-content").html(data);
                 }
             });
         }
