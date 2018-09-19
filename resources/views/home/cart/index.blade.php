@@ -42,12 +42,18 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <input type="text" class="amount" value="{{$v['amount']}}">
+                                        <div class="input-group bootstrap-touchspin">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-white bootstrap-touchspin-down reduce-amount" type="button" onclick="reduce_amount(this,'{{$v['id']}}')">-</button>
+                                            </span>
+                                            <input class="touchspin1 form-control" type="text" value="{{$v['amount']}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-white bootstrap-touchspin-up add-amount" type="button" onclick="add_amount(this,'{{$v['id']}}')">+</button>
+                                            </span>
+                                        </div>
                                     </td>
                                     <td>{{$v['attr']['price']}} 元</td>
                                     <td>
-                                        {{--<span class="btn btn-xs btn-info" title="详情信息" onclick="showGood('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>--}}
-                                        {{--<a class="btn btn-xs btn-info" title="修改信息" href="{{url('admin/good/'.$v['id'].'/edit')}}"><i class="fa fa-wrench"></i> 修改</a>--}}
                                         <span class="btn btn-xs btn-danger" title="删除商品" onclick="deleteGood(this,'{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>
                                     </td>
                                 </tr>
@@ -118,6 +124,92 @@
                 $('.icheck_input').iCheck('uncheck')
             });
         });
+            //数量增
+            function add_amount(obj,cart_ite_id) {
+                var touchspin1 = $(obj).parents('.bootstrap-touchspin').find('.touchspin1');
+                var amount = touchspin1.val();
+                //当前cart_item_id
+                //amount值
+                $.ajax({
+                    type: "post",
+                    url: "{{url('member/cart/amount')}}",
+                    data: {
+                        '_token': "{{csrf_token()}}",
+                        'type' : 'add',
+                        'cart_item_id' : cart_ite_id
+                    },
+                    dataType:"json",
+                    beforeSend:function () {
+                        // 禁用按钮防止重复提交
+                        $(obj).attr({ disabled: "disabled" });
+                    },
+                    success: function (data) {
+                        if(data.code==1){
+                            amount++;
+                            touchspin1.val(amount);
+                            if(touchspin1.val() >1 ){
+                                $(obj).parents('.bootstrap-touchspin').find('.reduce-amount').attr('disabled',false);
+                            }
+                        }else{
+                            swal("", data.message, "error");
+                        }
+                    },
+                    complete:function () {
+                        $(obj).removeAttr("disabled");
+                    },
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        blog.errorPrompt(jqXHR, textStatus, errorThrown);
+                    }
+                });
+
+            }
+            //数量减
+            function reduce_amount(obj,cart_ite_id) {
+//                $(this).parents('.bootstrap-touchspin').find('').val();
+                var touchspin1 = $(obj).parents('.bootstrap-touchspin').find('.touchspin1');
+                var amount = touchspin1.val();
+
+                if(amount <= 1){
+                    $(obj).attr('disabled',true);
+                }else{
+
+                    //当前cart_item_id
+                    //amount值
+                    $.ajax({
+                        type: "post",
+                        url: "{{url('member/cart/amount')}}",
+                        data: {
+                            '_token': "{{csrf_token()}}",
+                            'type': 'reduce',
+                            'cart_item_id' : cart_ite_id
+                        },
+                        dataType:"json",
+                        beforeSend:function () {
+                            // 禁用按钮防止重复提交
+                            $(obj).attr({ disabled: "disabled" });
+                        },
+                        success: function (data) {
+                            if(data.code==1){
+                                amount--;
+                                console.log(amount);
+                                touchspin1.val(amount);
+                            }else{
+                                swal("", data.message, "error");
+                            }
+                        },
+                        complete:function () {
+                            $(obj).removeAttr("disabled");
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            blog.errorPrompt(jqXHR, textStatus, errorThrown);
+                        }
+                    });
+
+
+                }
+            }
+
+
 
         function add(obj) {
 

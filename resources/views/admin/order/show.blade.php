@@ -86,14 +86,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{--<div class="col-md-6" >
-                                <div class="form-group">
-                                    <label for="name" class="col-sm-4 control-label">物流数据</label>
-                                    <div class="col-sm-8">
-                                        <input id="name" type="text" name="name" value="{{$order_info['ship_data']?$order_info['ship_data']:'暂无数据'}}" disabled class="form-control">
-                                    </div>
-                                </div>
-                            </div>--}}
                             <div class="col-md-12" >
                                 <table class="table table-striped  table-bordered" id="good_list" >
                                     <thead>
@@ -118,6 +110,36 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @if($order_info['refund_status']>0)
+                                <div class="col-md-8" >
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-3 control-label">退款状态</label>
+                                        <div class="col-sm-9">
+                                            @if($order_info['refund_status']==0)
+                                                <span class="label label-primary">未退款</span>
+                                            @elseif($order_info['refund_status']==1)
+                                                <span class="label label-info">已申请退款</span>
+                                            @elseif($order_info['refund_status']==2)
+                                                <span class="label label-default">退款中</span>
+                                            @elseif($order_info['refund_status']==3)
+                                                <span class="label label-success">退款成功</span>
+                                            @else
+                                                <span class="label label-danger">拒绝退款</span>
+                                            @endif
+                                            <span class="block" >退款理由：{{$order_info->refund['refund_reason']}}</span>
+                                            @if($order_info->refund['refuse_reason'])
+                                                <span class="block" >拒绝退款理由：{{$order_info->refund['refuse_reason']}}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" >
+                                @if($order_info['refund_status']==1)
+                                    <a class="btn btn-success" id="btn-refund-agree" title="同意" >同意</a>
+                                    <a class="btn btn-danger" title="拒绝" onclick="refuseOrder('{{$order_info['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-trash-o"></i> 拒绝</a>
+                                @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -177,7 +199,52 @@
             increaseArea: '20%'
         });
 
+
+        $('#btn-refund-agree').on("click",function() {
+            $.ajax({
+                type: "post",
+                url: "{{url('admin/order/refund')}}",
+                data: {
+                    '_token': "{{csrf_token()}}",
+                    'order_id': "{{$order_info['id']}}"
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 1) {
+                        swal({
+                            title: "",
+                            text: data.message,
+                            type: "success",
+                            timer: 1000,
+                        }, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        swal("", data.message, "error");
+                    }
+                }
+            });
+        });
+
+
     });
+
+
+
+    function refuseOrder(id) {
+//        $(".bs-example-modal-md .modal-content").html();
+        $.ajax({
+            url: "{{ url('admin/order/to_refuse') }}/"+id,
+            type: 'GET',
+            dataType: 'HTML',
+            cache:false,
+            beforeSend: function () {
+            },
+            success: function (data, textStatus, xhr) {
+                $(".bs-example-modal-md .modal-content").html(data);
+            }
+        });
+    }
 
 </script>
 

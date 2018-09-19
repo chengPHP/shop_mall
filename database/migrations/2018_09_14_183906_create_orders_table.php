@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->dateTime('paid_at')->nullable()->comment('支付时间');
             $table->string('payment_method')->nullable()->comment('支付方式');
             $table->string('payment_no')->nullable()->comment('支付平台订单号');
-            $table->tinyInteger('refund_status')->nullable()->comment('退款状态 0|未退款 1|已申请退款 2|退款中 3|退款成功 4|退款失败');
+            $table->tinyInteger('refund_status')->nullable()->comment('退款状态 0|未退款 1|已申请退款 2|退款中 3|退款成功 4|拒绝退款');
             $table->string('refund_no')->nullable()->comment('退款单号');
             $table->tinyInteger('closed')->default(0)->comment('订单是否已关闭 0|否 1|是');
             $table->tinyInteger('evaluate_id')->nullable()->comment('评价id');

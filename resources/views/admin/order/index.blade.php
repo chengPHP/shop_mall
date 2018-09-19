@@ -24,6 +24,7 @@
                                 <th>订单总金额</th>
                                 <th>支付方式</th>
                                 <th>物流状态</th>
+                                <th>退款状态</th>
                                 <th>设置</th>
                             </tr>
                             </thead>
@@ -53,12 +54,24 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @if($v['refund_status']==0)
+                                            <span class="label label-primary">未退款</span>
+                                        @elseif($v['refund_status']==1)
+                                            <span class="label label-info">已申请退款</span>
+                                        @elseif($v['refund_status']==2)
+                                            <span class="label label-default">退款中</span>
+                                        @elseif($v['refund_status']==3)
+                                            <span class="label label-success">退款成功</span>
+                                        @else
+                                            <span class="label label-danger">拒绝退款</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
                                         @if($v['ship_status']==0 && !$v['closed'])
                                             <a class="btn btn-xs btn-success" title="修改信息" onclick="seedOrder(this,'{{$v['id']}}')" ><i class="fa fa-wrench"></i> 发货</a>
                                             <a class="btn btn-xs btn-danger" title="关闭订单" onclick="closeOrder(this,'{{$v['id']}}')" ><i class="fa fa-trash-o"></i> 关闭</a>
                                         @endif
-                                        {{--<span class="btn btn-xs btn-danger" title="删除商品" onclick="deleteGood(this,'{{$v['id']}}')"><i class="fa fa-trash-o" ></i> 删除</span>--}}
                                     </td>
                                 </tr>
                             @endforeach

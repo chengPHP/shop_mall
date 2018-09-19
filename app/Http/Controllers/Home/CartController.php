@@ -105,4 +105,54 @@ class CartController extends Controller
         }
         return response()->json($message);
     }
+
+    public function amount(Request $request){
+//        dd($request->all());
+        switch ($request->type){
+            case 'add':
+                $cart_item_info = CartItem::find($request->cart_item_id);
+                $info = CartItem::where('id',$request->cart_item_id)->update(['amount'=>($cart_item_info->amount)+1]);
+                if($info){
+                    $message = [
+                        'code' => 1,
+                        'message' => '修改成功'
+                    ];
+                }else{
+                    $message = [
+                        'code' => 0,
+                        'message' => '修改失败'
+                    ];
+                }
+                break;
+            case 'reduce':
+                $cart_item_info = CartItem::find($request->cart_item_id);
+                if($cart_item_info->amount == 1){
+                    $message = [
+                        'code' => 0,
+                        'message' => '已经为最小值'
+                    ];
+                }else{
+                    $info = CartItem::where('id',$request->cart_item_id)->update(['amount'=>($cart_item_info->amount)-1]);
+                    if($info){
+                        $message = [
+                            'code' => 1,
+                            'message' => '修改成功'
+                        ];
+                    }else{
+                        $message = [
+                            'code' => 0,
+                            'message' => '修改失败'
+                        ];
+                    }
+                }
+                break;
+            default:
+                $message = [
+                    'code' => 0,
+                    'message' => '非法操作'
+                ];
+                break;
+        }
+        return response()->json($message);
+    }
 }

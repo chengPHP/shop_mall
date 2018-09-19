@@ -1,10 +1,9 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">添加评价</h4>
+    <h4 class="modal-title">填写拒绝理由</h4>
 </div>
-<form id="signupForm" method="post" class="form-horizontal" action="{{url('member/order/do_refund')}}">
+<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/order/refuse')}}">
     <div class="modal-body">
-
         {{--错误信息提示--}}
         @if (count($errors) > 0)
             <div class="alert alert-danger">
@@ -15,28 +14,12 @@
                 </ul>
             </div>
         @endif
-
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="order_id" value="{{$id}}">
         <div class="form-group">
-            <label for="score" class="col-sm-2 control-label">评分</label>
+            <label for="refuse_reason" class="col-sm-2 control-label">拒绝理由<span style="color:red;">*</span></label>
             <div class="col-sm-10">
-                <select id="score" class="form-control m-b select2" name="score">
-                    <option value="">--请选择--</option>
-                    <option value="1">1分</option>
-                    <option value="2">2分</option>
-                    <option value="3">3分</option>
-                    <option value="4">4分</option>
-                    <option value="5">5分</option>
-                </select>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="contents" class="col-sm-2 control-label">评价内容</label>
-            <div class="col-sm-10">
-                <textarea name="contents" id="contents" class="text-box" cols="55" rows="5" style="resize: none;padding: 10px;border: 1px solid #acacac;border-radius: 10px;">
-                </textarea>
+                <input type="text" class="form-control" name="refuse_reason">
             </div>
         </div>
     </div>
@@ -61,7 +44,7 @@
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('member/order/do_refund')}}",
+            url: "{{url('admin/order/refuse')}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {

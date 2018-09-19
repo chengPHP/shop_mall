@@ -44,9 +44,15 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
 
     //订单管理
     Route::post('order/seed_order','OrderController@seed_order');
+    Route::get('order/to_refuse/{id}','OrderController@to_refuse');
+    Route::post('order/refuse','OrderController@refuse');
+
+    Route::post('order/refund', 'OrderController@handleRefund');
     Route::resource('order','OrderController');
 
 });
+
+
 
 //文件管理模块路由开始
 //-------------------------------------------------------------------------
@@ -72,8 +78,12 @@ Route::group(['namespace'=>'Home'], function () {
     Route::post('member/order/delivers','OrderController@delivers');
     Route::get('member/order/to_evaluate/{id}','OrderController@to_evaluate');
     Route::post('member/order/do_evaluate','OrderController@do_evaluate');
+    //申请退款
+    Route::get('member/order/to_refund/{id}','OrderController@to_refund');
+    Route::post('member/order/do_refund','OrderController@do_refund');
     Route::resource('member/order','OrderController');
     //我的购物车
+    Route::post('member/cart/amount','CartController@amount');
     Route::resource('member/cart','CartController');
 //    Route::get('member/my_shop_cart','MemberController@my_shop_cart');
     //删除购物车指定商品

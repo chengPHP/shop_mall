@@ -8,6 +8,7 @@ use App\Models\Evaluate;
 use App\Models\Logistic;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\RefundOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -72,7 +73,7 @@ class OrderController extends Controller
             'address_id' => $request->address_id,
             'total_amount' => $total_amount,
             'remark' => $request->remark,
-            'reviewed' => 0,
+//            'reviewed' => 0,
 //            'paid_at' => date("y-m-d H:i:s"),
 //            'payment_method' => "支付宝支付",
 //            'payment_no' => date('YmdHis').rand(100,999),
@@ -265,6 +266,53 @@ class OrderController extends Controller
                 $message = [
                     'code' => 0,
                     'message' => '网络异常，请稍后重试'
+                ];
+            }
+        }
+        return response()->json($message);
+    }
+
+    /**
+     * 申请退款页面
+     */
+
+    public function to_refund($id)
+    {
+        return view('home.order.to_refund',compact('id'));
+    }
+
+    /**
+     * @param Request $request
+     * 上传申请退款理由
+     */
+    public function do_refund(Request $request)
+    {
+        $order_info = Order::find($request->order_id);
+        if($order_info->refund_status){
+            $message = [
+                'code' => 0,
+                'message' => '已发起申请退款或已处理'
+            ];
+        }else{
+            $arr = [
+                'order_id'=>$request->order_id,
+                'refund_reason'=>$request->refund_reason
+            ];
+            $refund_order_id = RefundOrder::insertGetId($arr);
+            $map = [
+                'refund_status'=>1,
+                'refund_no' => $refund_order_id
+            ];
+            $info = Order::where('id',$request->order_id)->update($map);
+            if($info){
+                $message = [
+                    'code' => 1,
+                    '退款申请成功，等待卖家处理'
+                ];
+            }else{
+                $message = [
+                    'code' => 0,
+                    'message' => '处理异常，请稍后重试'
                 ];
             }
         }

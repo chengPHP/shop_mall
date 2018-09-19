@@ -57,6 +57,9 @@
                                         <span class="btn btn-xs btn-info" title="详情信息" onclick="showOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-wrench"></i> 详情</span>
                                         @if($v['ship_status']==1)
                                             <span class="btn btn-xs btn-success" title="确认签收" onclick="deliversOrder(this,'{{$v['id']}}')">确认签收</span>
+                                            @if($v['refund_status']<1)
+                                                <span class="btn btn-xs btn-success" title="申请退货" onclick="returnOrder('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md">申请退货</span>
+                                            @endif
                                         @elseif($v['ship_status']==2 && !$v['evaluate_id'])
                                             <span class="btn btn-xs btn-info" title="评价" onclick="reviewed('{{$v['id']}}')" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-wrench"></i> 评价</span>
                                         @endif
@@ -207,6 +210,21 @@
                 },
                 success: function (data, textStatus, xhr) {
                     $(".bs-example-modal-lg .modal-content").html(data);
+                }
+            });
+        }
+
+        function returnOrder(id) {
+            $(".bs-example-modal-md .modal-content").html();
+            $.ajax({
+                url: "{{ url('member/order/to_refund') }}/"+id,
+                type: 'GET',
+                dataType: 'HTML',
+                cache:false,
+                beforeSend: function () {
+                },
+                success: function (data, textStatus, xhr) {
+                    $(".bs-example-modal-md .modal-content").html(data);
                 }
             });
         }

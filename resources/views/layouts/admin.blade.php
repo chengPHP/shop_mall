@@ -363,6 +363,17 @@
     }
 
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('body').on('hidden.bs.modal','.modal',function(e){
+            $(this).removeData();
+        });
+        // $('body').on('hidden.bs.modal','.bs-example-modal-md',function(e){
+        //     $(this).removeData("bs.modal");
+        // });
+    });
+</script>
 </body>
 
 </html>
